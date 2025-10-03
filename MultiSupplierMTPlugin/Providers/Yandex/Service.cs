@@ -80,7 +80,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
 
             var rType = _mtGeneralSettings.RequestType;
             transRequest.Format = (rType == RequestType.OnlyFormattingWithHtml) || (rType == RequestType.BothFormattingAndTagsWithHtml)
-                ? Format.HTML 
+                ? Format.HTML
                 : Format.FORMAT_UNSPECIFIED;
 
             if (!string.IsNullOrEmpty(g.FolderId))
@@ -92,12 +92,12 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
             if (!string.IsNullOrEmpty(g.GlossaryFilePath))
             {
                 var glossaryPairs = GlossaryHelper.ReadGlossaryPairs(g.GlossaryFilePath, srcLangCode, trgLangCode, g.GlossaryDelimiter);
-                
+
                 transRequest.GlossaryConfig = new GlossaryConfig()
                 {
                     GlossaryData = new GlossaryData()
                     {
-                        GlossaryPairs = glossaryPairs.Select(pair => new GlossaryPairs() 
+                        GlossaryPairs = glossaryPairs.Select(pair => new GlossaryPairs()
                         {
                             SourceText = pair.Key,
                             TranslatedText = pair.Value,
@@ -107,11 +107,11 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
                 };
             }
 
-            var transResponse = await _httpClient.Post(_baseUrl)                
+            var transResponse = await _httpClient.Post(_baseUrl)
                 .AddHeaderIf(g.AuthorizationType == AuthorizationType.ApiKey, "Authorization", "Api-Key " + s.KeyOrToken)
                 .AddHeaderIf(g.AuthorizationType == AuthorizationType.IamToken, "Authorization", "Bearer " + s.KeyOrToken)
                 .SetBodyJson(transRequest)
-                .ReceiveJson<TransResponse>(cToken);           
+                .ReceiveJson<TransResponse>(cToken);
 
             return transResponse.Translations.Select(t => t.Text).ToList();
         }

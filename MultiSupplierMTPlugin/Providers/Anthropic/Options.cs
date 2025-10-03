@@ -15,7 +15,7 @@ namespace MultiSupplierMTPlugin.Providers.Anthropic
 
         public override string BaseURL { get; set; } = "https://api.anthropic.com/v1";
 
-        public override string Path { get; set; } = "/messages";        
+        public override string Path { get; set; } = "/messages";
 
         public override int MaxTokens { get; set; } = 4096;
 

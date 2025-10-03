@@ -108,10 +108,10 @@ namespace MultiSupplierMTPlugin.Providers.Anthropic
         }
 
         protected override async Task<string> TranslateAsync(
-            GeneralSettings g, SecureSettings s, 
+            GeneralSettings g, SecureSettings s,
             string systemPrompt, string userPrompt,
-            List<string> texts, string srcLang, string tgtLang, 
-            List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, 
+            List<string> texts, string srcLang, string tgtLang,
+            List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData,
             CancellationToken cToken)
         {
             var localizedName = ServiceLocalizedNameHelper.Get(UniqueName);

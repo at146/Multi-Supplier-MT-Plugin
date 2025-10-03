@@ -51,7 +51,7 @@ namespace MultiSupplierMTPlugin
 
         public override Image SmallIcon
         {
-            get 
+            get
             {
                 return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("MultiSupplierMTPlugin.Icon.png"));
             }

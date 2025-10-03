@@ -19,7 +19,7 @@ namespace MultiSupplierMTPlugin.Providers.Aliyun
 
         private const string _baseUrl = "https://mt.cn-hangzhou.aliyuncs.com/api/translate/web";
 
-        public Service(MultiSupplierMTOptions mtOptions, ProviderOptions options) : base(mtOptions, options){ }
+        public Service(MultiSupplierMTOptions mtOptions, ProviderOptions options) : base(mtOptions, options) { }
 
 
         public override string UniqueName { get; set; } = ServiceNames.Aliyun;
@@ -133,7 +133,7 @@ namespace MultiSupplierMTPlugin.Providers.Aliyun
                 httpMethod.ToString().ToUpper() + "&"
                 + PercentEncode("/") + "&"
                 + PercentEncode(canonicalizedQueryString);
-            
+
             //生成签名
             var keyBytes = Encoding.UTF8.GetBytes(accessKeySecret + "&");
             var signatureBytes = new HMACSHA1(keyBytes).ComputeHash(Encoding.UTF8.GetBytes(stringToSign));

@@ -84,7 +84,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
             radioButtonIamToken.Checked = _generalSettings.AuthorizationType == AuthorizationType.IamToken;
             textBoxKeyOrToken.Text = _secureSettings.KeyOrToken;
             textBoxFolderId.Text = _generalSettings.FolderId;
-            
+
             radioButtonExactEnable.Checked = _generalSettings.GlossaryExact;
             radioButtonExactDisable.Checked = !_generalSettings.GlossaryExact;
             textBoxGlossaryDelimiter.Text = _generalSettings.GlossaryDelimiter;
@@ -93,7 +93,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
             radioButtonSpellerEnable.Checked = _generalSettings.Speller;
             radioButtonSpellerDisable.Checked = !_generalSettings.Speller;
             textBoxModel.Text = _generalSettings.Model;
-            
+
             commonBottomControl.Init(this, _generalSettings.Checked, _service.ApiDocLink, linkLabelCheck_LinkClicked, Controls);
         }
 
@@ -105,7 +105,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
                     _generalSettings.AuthorizationType != (radioButtonApiKey.Checked ? AuthorizationType.ApiKey : AuthorizationType.IamToken) ||
                     _secureSettings.KeyOrToken != textBoxKeyOrToken.Text ||
                     _generalSettings.FolderId != textBoxFolderId.Text ||
-                    
+
                     _generalSettings.GlossaryExact != radioButtonExactEnable.Checked ||
                     _generalSettings.GlossaryDelimiter != textBoxGlossaryDelimiter.Text ||
                     _generalSettings.GlossaryFilePath != textBoxGlossaryFilePath.Text ||
@@ -125,11 +125,11 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
             radioButtonApiKey.CheckedChanged += onOptionsChanged;
             textBoxKeyOrToken.TextChanged += onOptionsChanged;
             textBoxFolderId.TextChanged += onOptionsChanged;
-            
+
             radioButtonExactEnable.CheckedChanged += onOptionsChanged;
             textBoxGlossaryDelimiter.TextChanged += onOptionsChanged;
             textBoxGlossaryFilePath.TextChanged += onOptionsChanged;
-            
+
             radioButtonSpellerEnable.CheckedChanged += onOptionsChanged;
             textBoxModel.TextChanged += onOptionsChanged;
         }
@@ -150,11 +150,11 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
         {
             await _service.Check(
                 new Options(
-                    new GeneralSettings() 
+                    new GeneralSettings()
                     {
                         AuthorizationType = radioButtonApiKey.Checked ? AuthorizationType.ApiKey : AuthorizationType.IamToken,
                         FolderId = textBoxFolderId.Text,
-                        
+
                         GlossaryExact = radioButtonExactEnable.Checked,
                         GlossaryDelimiter = textBoxGlossaryDelimiter.Text,
                         GlossaryFilePath = textBoxGlossaryFilePath.Text,
@@ -162,7 +162,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
                         Speller = radioButtonSpellerEnable.Checked,
                         Model = textBoxModel.Text,
                     },
-                    new SecureSettings() {   KeyOrToken = textBoxKeyOrToken.Text }));
+                    new SecureSettings() { KeyOrToken = textBoxKeyOrToken.Text }));
         }
 
         private void linkLabelKeyOrToken_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -189,7 +189,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
                 _generalSettings.GlossaryDelimiter = textBoxGlossaryDelimiter.Text;
                 _generalSettings.GlossaryFilePath = textBoxGlossaryFilePath.Text;
 
-                _generalSettings.Speller = radioButtonSpellerEnable.Checked;                
+                _generalSettings.Speller = radioButtonSpellerEnable.Checked;
                 _generalSettings.Model = textBoxModel.Text;
 
                 _generalSettings.Checked = true;

@@ -90,13 +90,13 @@ namespace MultiSupplierMTPlugin.Forms
         }
 
         private void UpdateControlState()
-        {            
+        {
             bool hasSel = comboBoxProviders.SelectedIndex != -1;
             bool hasSelAndRenaming = hasSel & _renaming;
             bool hasSelNoRenaming = hasSel & !_renaming;
             bool noEmptyNoRenaming = _providers.Count > 0 & !_renaming;
 
-            buttonAdd.Enabled = !_renaming;            
+            buttonAdd.Enabled = !_renaming;
             buttonDelete.Enabled = hasSelNoRenaming;
             buttonRename.Enabled = hasSel;
 
@@ -174,7 +174,7 @@ namespace MultiSupplierMTPlugin.Forms
 
                 UpdateControlState();
 
-                comboBoxProviders_SelectedIndexChanged(comboBoxProviders, EventArgs.Empty);                
+                comboBoxProviders_SelectedIndexChanged(comboBoxProviders, EventArgs.Empty);
             }
         }
 
@@ -206,7 +206,7 @@ namespace MultiSupplierMTPlugin.Forms
 
                 textBoxProvider.Visible = _renaming;
                 comboBoxProviders.Visible = !_renaming;
-                buttonRename.Text = LLH.G(_renaming ? LLK.ButtonApply : LLK.ButtonRename);                
+                buttonRename.Text = LLH.G(_renaming ? LLK.ButtonApply : LLK.ButtonRename);
             }
         }
 

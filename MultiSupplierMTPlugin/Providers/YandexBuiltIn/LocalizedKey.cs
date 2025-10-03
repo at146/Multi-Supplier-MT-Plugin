@@ -13,6 +13,6 @@ namespace MultiSupplierMTPlugin.Providers.YandexBuiltIn
             AutoInit<LocalizedKey>();
         }
 
-        
+
     }
 }

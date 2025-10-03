@@ -30,16 +30,16 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
 
         private BindingList<ModelItem> _models;
 
-        private ModelItem[] _buildInModels; 
+        private ModelItem[] _buildInModels;
 
         private List<string> _networkModels;
-       
+
         private int _previousModelIndex = -1;
         private bool _ignoreModelIndexChange = false;
 
         private ContextMenuStrip _textBoxPromptMenu;
 
-        public OptionsForm(LLMBaseService service, 
+        public OptionsForm(LLMBaseService service,
             LLMBaseGeneralSettings generalSettings, LLMBaseSecureSettings secureSettings,
             MultiSupplierMTGeneralSettings mtGeneralSettings, MultiSupplierMTSecureSettings mtSecureSettings)
         {
@@ -79,7 +79,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
 
             labelOrganization.Text = LLH.G(LLK.LabelOrganization);
             linkLabelApiKey.Text = LLH.G(LLK.LinkLabelApiKey);
-            
+
             PlaceholderTextBox.SetCueBanner(textBoxOrganization, LLH.G(LLKC.Textbox_OptionalTip));
 
             linkLabelModel.Text = LLH.G(LLK.LinkLabelModel);
@@ -90,7 +90,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
 
             labelSystemPrompt.Text = LLH.G(LLK.LabelSystemPrompt);
             labelUserPrompt.Text = LLH.G(LLK.LabelUserPrompt);
-            
+
             toolTip.SetToolTip(labelSystemPrompt, LLH.G(LLKC.ToolTip_LLMPromptTip));
             toolTip.SetToolTip(labelUserPrompt, LLH.G(LLKC.ToolTip_LLMPromptTip));
 
@@ -114,7 +114,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
 
             LoadModels(_generalSettings.Model, _generalSettings.Model, _generalSettings.UserModels, _buildInModels, _generalSettings.HidenBuildInModels.ToHashSet());
             LoadPromptTemplates(_generalSettings.PromptTemplateId, _mtGeneralSettings.LLMCommon.PromptTemplates);
-            
+
             checkBoxBathTranslate.Checked = _generalSettings.EnableBathTranslate;
 
             buttonListModels.Enabled = !string.IsNullOrEmpty(textBoxApiKey.Text);
@@ -130,7 +130,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
             models.AddRange(buildInModels.Where(m => !hidenBuildInModels.Contains(m.UniqueName)).ToList());
 
             // 当前模型不是空白，且模型列表不包含当前模型，添加当前模型到列表
-            if (!string.IsNullOrEmpty(currentModel) && !models.Any(m => m.UniqueName == currentModel)) 
+            if (!string.IsNullOrEmpty(currentModel) && !models.Any(m => m.UniqueName == currentModel))
                 models.Insert(0, new ModelItem() { UniqueName = currentModel, DisplayName = currentModel });
 
             // 末尾添加一个占位项
@@ -163,21 +163,21 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
             promptTemplates.Insert(0, new PromptTemplate()
             {
                 ID = "",
-                Name = LLH.G(LLK.PromptTemplateNoUse), 
+                Name = LLH.G(LLK.PromptTemplateNoUse),
                 SystemPrompt = _generalSettings.SystemPrompt,
                 UserPrompt = _generalSettings.UserPrompt,
                 BathTranslateSystemPrompt = _generalSettings.BathTranslateSystemPrompt,
                 BathTranslateUserPrompt = _generalSettings.BathTranslateUserPrompt,
             });
-            promptTemplates.Insert(1,  PromptTemplate.GetDefault(LLH.G(LLK.DefaultPromptTemplateName)));
+            promptTemplates.Insert(1, PromptTemplate.GetDefault(LLH.G(LLK.DefaultPromptTemplateName)));
 
             _promptTemplates = new BindingList<PromptTemplate>(promptTemplates);
             comboBoxPromptTemplate.DataSource = _promptTemplates;
-            comboBoxPromptTemplate.DisplayMember = "Name";            
+            comboBoxPromptTemplate.DisplayMember = "Name";
 
             int index = promptTemplates.FindIndex(p => p.ID == currentTemplateId);
 
-            comboBoxPromptTemplate.SelectedIndex = index == -1 ? 0 : index;            
+            comboBoxPromptTemplate.SelectedIndex = index == -1 ? 0 : index;
         }
 
         private void BindOptionsChangedEvent()
@@ -202,7 +202,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
                 }
             }
 
-            void onTextBoxApiKeyChanged(object sender, EventArgs e) 
+            void onTextBoxApiKeyChanged(object sender, EventArgs e)
             {
                 if (string.IsNullOrEmpty(textBoxApiKey.Text))
                 {
@@ -244,7 +244,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
                 .Replace(Environment.NewLine, "\n").Replace("\n", Environment.NewLine); // 解决 xml 反序列化后换行符总是变成 \n;
         }
 
-        
+
         private async Task linkLabelCheck_LinkClicked()
         {
             var option = _service.GetDefaultOptions();
@@ -327,7 +327,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
             int specialIndex = comboBoxModels.Items.Count - 1;
 
             if (currentIndex == specialIndex)
-            {               
+            {
                 using (var form = new CustomModels(_mtGeneralSettings, _mtSecureSettings, _generalSettings, _buildInModels, _networkModels))
                 {
                     form.ShowDialog();
@@ -352,8 +352,8 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
         }
 
         private void comboBoxPromptTemplate_SelectedIndexChanged(object sender, EventArgs e)
-        {           
-            if (comboBoxPromptTemplate.SelectedItem is PromptTemplate promptTemplate) 
+        {
+            if (comboBoxPromptTemplate.SelectedItem is PromptTemplate promptTemplate)
             {
                 bool noUse = string.IsNullOrEmpty(promptTemplate.ID);
 
@@ -369,7 +369,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
 
         private void textBoxSystemPrompt_TextChanged(object sender, EventArgs e)
         {
-            if (comboBoxPromptTemplate.SelectedItem is PromptTemplate promptTemplate) 
+            if (comboBoxPromptTemplate.SelectedItem is PromptTemplate promptTemplate)
             {
                 if (checkBoxBathTranslate.Checked)
                     promptTemplate.BathTranslateSystemPrompt = textBoxSystemPrompt.Text;
@@ -482,7 +482,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
                 _generalSettings.UserPrompt = _promptTemplates[0].UserPrompt;
                 _generalSettings.BathTranslateSystemPrompt = _promptTemplates[0].BathTranslateSystemPrompt;
                 _generalSettings.BathTranslateUserPrompt = _promptTemplates[0].BathTranslateUserPrompt;
-                
+
                 _generalSettings.EnableBathTranslate = checkBoxBathTranslate.Checked;
 
                 _generalSettings.Checked = true;

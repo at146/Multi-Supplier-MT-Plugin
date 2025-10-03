@@ -43,7 +43,7 @@ namespace MultiSupplierMTPlugin.Forms
 
         private void LoadOptions()
         {
-            
+
         }
 
         private void linkLabelViweOnGithub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

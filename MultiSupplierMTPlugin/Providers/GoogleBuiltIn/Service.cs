@@ -65,7 +65,7 @@ namespace MultiSupplierMTPlugin.Providers.GoogleBuiltIn
         public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, CancellationToken cToken, ProviderOptions tempOptions)
         {
             string[] result = new string[texts.Count];
-            
+
             var jsonResponse = await _httpClient.Get(_baseUrl)
                 .AddQuery("client", "gtx")
                 .AddQuery("dt", "t")

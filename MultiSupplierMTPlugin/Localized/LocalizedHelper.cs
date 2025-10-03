@@ -107,7 +107,7 @@ namespace MultiSupplierMTPlugin.Localized
 
             var directories = Directory.GetDirectories(baseDir);
 
-            var availableLanguages = new HashSet<string>() { "en-US", "zh-CN"};
+            var availableLanguages = new HashSet<string>() { "en-US", "zh-CN" };
 
             foreach (var dir in directories)
             {
@@ -221,7 +221,7 @@ namespace MultiSupplierMTPlugin.Localized
 
                         if (attr != null)
                         {
-                            calssFile.LocalizedItem.Add( new LocalizedItem()
+                            calssFile.LocalizedItem.Add(new LocalizedItem()
                             {
                                 GUID = attr.GUID,
                                 EN_US = attr.EN_US,
@@ -456,7 +456,7 @@ namespace MultiSupplierMTPlugin.Localized
 
             public string ZH_CN { get; set; }
 
-            public string PropertyName {  get; set; }
+            public string PropertyName { get; set; }
         }
         #endregion
     }

@@ -34,14 +34,14 @@ namespace MultiSupplierMTPlugin.Helpers
         public static void Error(string message)
         {
             _logger.Log(message, LogLevel.Error);
-        }        
+        }
 
-        public static bool TryGetLogFilePath(out string logFilePath) 
+        public static bool TryGetLogFilePath(out string logFilePath)
         {
             return _logger.TryGetLogFilePath(out logFilePath);
         }
 
-        public static bool Enable 
+        public static bool Enable
         {
             get => _logger.Enable;
             set => _logger.Enable = value;
@@ -72,7 +72,7 @@ namespace MultiSupplierMTPlugin.Helpers
         private int _retentionDays;
 
         private string _currentLogFile;
-        
+
         private bool _isInitialized;
 
         public void Init(string logDir, string prefix, bool enable, LogLevel logLevel, int retentionDays)
@@ -92,7 +92,7 @@ namespace MultiSupplierMTPlugin.Helpers
                 _cancellationTokenSource = new CancellationTokenSource();
                 _messageQueue = new BlockingCollection<string>(new ConcurrentQueue<string>());
                 _writerTask = Task.Run(() => ProcessQueueAsync(_cancellationTokenSource.Token));
-                
+
                 _isInitialized = true;
 
                 Enable = enable;
@@ -125,7 +125,7 @@ namespace MultiSupplierMTPlugin.Helpers
         public bool TryGetLogFilePath(out string logFilePath)
         {
             logFilePath = _isInitialized ? _currentLogFile : null;
-            
+
             return _isInitialized;
         }
 

@@ -68,7 +68,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
         {
             textBoxUserModels.Text = ModelItemHelper.ToTextList(_llmBaseGeneralSettings.UserModels, ",\r\n");
 
-            var _hidenModels = _llmBaseGeneralSettings.HidenBuildInModels.ToHashSet();            
+            var _hidenModels = _llmBaseGeneralSettings.HidenBuildInModels.ToHashSet();
             foreach (var model in _buildinModels)
             {
                 var modelText = ModelItemHelper.ToText(model);

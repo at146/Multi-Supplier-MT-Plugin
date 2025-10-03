@@ -13,7 +13,7 @@ namespace MultiSupplierMTPlugin.Helpers
         private static readonly ConcurrentDictionary<string, byte> _lastCustomUniqueNames = new ConcurrentDictionary<string, byte>();
 
         private static readonly ConcurrentDictionary<string, byte> _allNames = new ConcurrentDictionary<string, byte>();
-        
+
         private static readonly ConcurrentDictionary<string, OpenAICompatibleServiceInfo> _allInfos = new ConcurrentDictionary<string, OpenAICompatibleServiceInfo>();
 
 
@@ -72,7 +72,7 @@ namespace MultiSupplierMTPlugin.Helpers
             }
 
             if (_allServices.TryGetValue(uniqueName, out service))
-            {                
+            {
                 return true;
             }
 
@@ -86,11 +86,11 @@ namespace MultiSupplierMTPlugin.Helpers
             return false;
         }
 
-        public static MultiSupplierMTService GetServiceOrFallback(string uniqueName) 
+        public static MultiSupplierMTService GetServiceOrFallback(string uniqueName)
         {
             if (TryGetService(uniqueName, out var service) || TryGetService(ServiceNames.Microsoft_BuiltIn, out service))
-            { 
-                return service; 
+            {
+                return service;
             }
 
             throw new InvalidOperationException("programming errors");
@@ -373,7 +373,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     ApiKeyLink = "https://console.bce.baidu.com/iam/#/iam/apikey/list",
                     ApiDocLink = "https://cloud.baidu.com/doc/qianfan-docs/s/1m9l6eex1",
                     Model = "ernie-4.0-8k",
-                    BuildInModels = String2ModelItems(new string[] 
+                    BuildInModels = String2ModelItems(new string[]
                     {
                         "ernie-4.5-turbo-128k",
                         "ernie-4.5-turbo-32k",
@@ -440,7 +440,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     ApiKeyLink = "https://console.xfyun.cn/services/bm35",
                     ApiDocLink = "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_7-%E4%BD%BF%E7%94%A8openai-sdk%E8%AF%B7%E6%B1%82%E7%A4%BA%E4%BE%8B",
                     Model = "generalv3",
-                    BuildInModels = String2ModelItems(new string[] 
+                    BuildInModels = String2ModelItems(new string[]
                     {
                         "4.0Ultra",
                         "generalv3.5",
@@ -448,7 +448,7 @@ namespace MultiSupplierMTPlugin.Helpers
                         "generalv3",
                         "pro-128k",
                         "lite",
-                    })                
+                    })
                 }
             },
 
@@ -478,7 +478,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     ApiKeyLink = "https://bigmodel.cn/usercenter/proj-mgmt/apikeys",
                     ApiDocLink = "https://bigmodel.cn/dev/api/thirdparty-frame/openai-sdk",
                     Model = "GLM-4-Flash-250414",
-                    BuildInModels = String2ModelItems(new string[] 
+                    BuildInModels = String2ModelItems(new string[]
                     {
                         "GLM-4-Plus",
                         "GLM-4-Air-250414 ",
@@ -619,7 +619,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     ApiKeyLink = "https://internlm.intern-ai.org.cn/api/tokens",
                     ApiDocLink = "https://internlm.intern-ai.org.cn/doc/docs/Chat/",
                     Model = "internlm3-latest",
-                    BuildInModels = String2ModelItems(new string[] 
+                    BuildInModels = String2ModelItems(new string[]
                     {
                         "internlm3-latest",
                         "internlm2.5-latest"
@@ -1056,7 +1056,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     ApiKeyLink = "https://cloud.infini-ai.com/iam/secret/key",
                     ApiDocLink = "https://docs.infini-ai.com/gen-studio/api/maas.html",
                     Model = "qwen3-8b",
-                    BuildInModels = String2ModelItems(new string[] 
+                    BuildInModels = String2ModelItems(new string[]
                     {
                         "deepseek-r1",
                         "deepseek-r1-0528-qwen3-8b",

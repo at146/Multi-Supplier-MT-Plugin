@@ -10,10 +10,10 @@ namespace MultiSupplierMTPlugin.Providers.DeepLBuiltIn
     }
 
     class GeneralSettings : NMTBaseGeneralSettings
-    {   
+    {
     }
 
     class SecureSettings : NMTBaseSecureSettings
-    {        
+    {
     }
 }

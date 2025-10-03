@@ -91,7 +91,7 @@ namespace MultiSupplierMTPlugin
         public LLMCommonGeneralSettings LLMCommon { get; set; } = new LLMCommonGeneralSettings();
 
 
-        public string[] EnableProviders { get; set; } = new string[] 
+        public string[] EnableProviders { get; set; } = new string[]
         {
             ServiceNames.Aliyun,
             ServiceNames.Baidu,
@@ -137,9 +137,9 @@ namespace MultiSupplierMTPlugin
             ServiceNames.Zhinao360_LLM,
             ServiceNames.Zhipu_LLM,
         };
-        
 
-        public OpenAICompatibleServiceInfo[] CustomOpenAICompatibleServiceInfos { get; set; } = new OpenAICompatibleServiceInfo[]{};
+
+        public OpenAICompatibleServiceInfo[] CustomOpenAICompatibleServiceInfos { get; set; } = new OpenAICompatibleServiceInfo[] { };
         #endregion
 
         #region providers 配置项（半多态方式实现）
@@ -165,7 +165,7 @@ namespace MultiSupplierMTPlugin
     class MultiSupplierMTSecureSettings
     {
         #region global 配置项
-        
+
         public string Version { get; set; } = string.Empty;
 
         #endregion
@@ -218,21 +218,21 @@ namespace MultiSupplierMTPlugin
 
             var gJson = JsonConvert.SerializeObject(GeneralSettings, jss);
             var sJson = JsonConvert.SerializeObject(SecureSettings, jss);
-            
+
             var g = JsonConvert.DeserializeObject<ProviderGeneralSettings>(gJson, jss);
             var s = JsonConvert.DeserializeObject<ProviderSecureSettings>(sJson, jss);
-            
+
             return new ProviderOptions(g, s);
         }
     }
 
-    class ProviderGeneralSettings 
-    { 
+    class ProviderGeneralSettings
+    {
         public virtual bool Checked { get; set; } = false;
     }
 
-    class ProviderSecureSettings 
-    { 
+    class ProviderSecureSettings
+    {
 
     }
 
@@ -358,7 +358,7 @@ namespace MultiSupplierMTPlugin
             };
 
             static SerializationHelper()
-            { 
+            {
                 _jss.Converters.Add(new ProviderSettingsDicConverter<ProviderGeneralSettings, Providers.OpenAI.GeneralSettings>(SettingsTypeMapping.General));
                 _jss.Converters.Add(new ProviderSettingsDicConverter<ProviderSecureSettings, Providers.OpenAI.SecureSettings>(SettingsTypeMapping.Secure));
             }

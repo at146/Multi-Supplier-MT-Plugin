@@ -45,9 +45,9 @@ namespace MultiSupplierMTPlugin.Providers.Huoshan
 
         private void Localized()
         {
-             Text = LLH.G(LLK.Form);
+            Text = LLH.G(LLK.Form);
 
-             labelAccessKey.Text = LLH.G(LLK.LabelAccessKey);
+            labelAccessKey.Text = LLH.G(LLK.LabelAccessKey);
             linkLabelSecretKey.Text = LLH.G(LLK.LinkLabelSecretKey);
         }
 
@@ -82,7 +82,8 @@ namespace MultiSupplierMTPlugin.Providers.Huoshan
 
         private async Task linkLabelCheck_LinkClicked()
         {
-            await _service.Check(new Options(new GeneralSettings(), new SecureSettings() {
+            await _service.Check(new Options(new GeneralSettings(), new SecureSettings()
+            {
                 AccessKey = textBoxAccessKey.Text,
                 SecretKey = textBoxSecretKey.Text
             }));

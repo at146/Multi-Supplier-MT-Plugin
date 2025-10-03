@@ -48,11 +48,11 @@ namespace MultiSupplierMTPlugin.Providers.DeepL
         private void Localized()
         {
             Text = LLH.G(LLK.DeepL);
-            
+
             labelServer.Text = LLH.G(LLK.LabelServer);
-            
+
             linkLabelAuthKey.Text = LLH.G(LLK.LinkLabelAuthKey);
-            
+
             labelGlossaryId.Text = LLH.G(LLK.LabelGlossaryId);
             PlaceholderTextBox.SetCueBanner(textBoxGlossaryId, LLH.G(LLKC.Textbox_OptionalTip));
         }
@@ -62,7 +62,7 @@ namespace MultiSupplierMTPlugin.Providers.DeepL
             textBoxServer.Text = _generalSettings.Server;
             textBoxAuthKey.Text = _secureSettings.AuthKey;
             textBoxGlossaryId.Text = _generalSettings.GlossaryId;
-            
+
             commonBottomControl.Init(this, _generalSettings.Checked, _service.ApiDocLink, linkLabelCheck_LinkClicked, Controls);
         }
 
@@ -92,8 +92,8 @@ namespace MultiSupplierMTPlugin.Providers.DeepL
         private async Task linkLabelCheck_LinkClicked()
         {
             await _service.Check(new Options(
-                    new GeneralSettings() { Server = textBoxServer.Text, GlossaryId = textBoxGlossaryId.Text}, 
-                    new SecureSettings() { AuthKey = textBoxAuthKey.Text}));
+                    new GeneralSettings() { Server = textBoxServer.Text, GlossaryId = textBoxGlossaryId.Text },
+                    new SecureSettings() { AuthKey = textBoxAuthKey.Text }));
         }
 
         private void linkLabelAuthKey_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

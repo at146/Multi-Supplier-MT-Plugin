@@ -45,7 +45,7 @@ namespace MultiSupplierMTPlugin.Providers.Niutrans
 
         private void Localized()
         {
-             Text = LLH.G(LLK.Form);
+            Text = LLH.G(LLK.Form);
 
             linkLabelApikey.Text = LLH.G(LLK.LinkLabelApikey);
         }
@@ -78,7 +78,8 @@ namespace MultiSupplierMTPlugin.Providers.Niutrans
 
         private async Task linkLabelCheck_LinkClicked()
         {
-            await _service.Check(new Options(new GeneralSettings(), new SecureSettings() {
+            await _service.Check(new Options(new GeneralSettings(), new SecureSettings()
+            {
                 Apikey = textBoxApikey.Text
             }));
         }

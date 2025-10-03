@@ -43,7 +43,7 @@ namespace MultiSupplierMTPlugin.Forms
             labelMaxSegmentsPerRequest.Text = LLH.G(LLK.LabelMaxSegmentsPerRequest);
             labelMaxCharactersPerRequest.Text = LLH.G(LLK.LabelMaxCharactersPerRequest);
             labelNoBathTip.Text = LLH.G(LLK.LabelNoBathTip);
-            
+
             toolTip.SetToolTip(numericUpDownMaxSegmentsPerRequest, LLH.G(LLKC.ZeroIndicatesNoLimit));
             toolTip.SetToolTip(numericUpDownMaxCharactersPerRequest, LLH.G(LLKC.ZeroIndicatesNoLimit));
 
@@ -51,14 +51,14 @@ namespace MultiSupplierMTPlugin.Forms
             labelMaxRequestsPerWindow.Text = LLH.G(LLK.LabelMaxRequestsPerWindow);
             labelWindowSizeMs.Text = LLH.G(LLK.LabelWindowSizeMs);
             labelRequestSmoothness.Text = LLH.G(LLK.LabelRequestSmoothness);
-            
+
             toolTip.SetToolTip(numericUpDownMaxRequestsPerWindow, LLH.G(LLKC.ZeroIndicatesNoLimit));
             toolTip.SetToolTip(numericUpDownWindowSizeMs, LLH.G(LLK.WindowSizeMsTip));
             toolTip.SetToolTip(numericUpDownRequestSmoothness, LLH.G(LLK.RequestSmoothnessTip));
 
             tabPageConcurrencyLimit.Text = LLH.G(LLK.TabPageConcurrencyLimit);
             labelMaxRequestsHold.Text = LLH.G(LLK.LabelMaxRequestsHold);
-            
+
             toolTip.SetToolTip(numericUpDownMaxRequestsHold, LLH.G(LLKC.ZeroIndicatesNoLimit));
 
             tabPageRetryLimit.Text = LLH.G(LLK.TabPageRetryLimit);

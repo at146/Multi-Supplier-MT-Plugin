@@ -100,7 +100,7 @@ namespace MemoQ.PreviewInterfaces.ProtcolWrappers.NamedPipe.Communication
                         startReadingAsync();
                 }
             });
-            }
+        }
 
         private Task sendCommandAsync(PipeCommand pipeCommand)
         {

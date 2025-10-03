@@ -258,7 +258,7 @@ namespace MultiSupplierMTPlugin.Forms
             catch
             {
                 textBoxEnableSearch.Text = "";
-            }            
+            }
         }
 
         private void textBoxSearchDisabled_TextChanged(object sender, EventArgs e)

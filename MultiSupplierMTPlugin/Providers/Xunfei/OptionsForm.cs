@@ -57,7 +57,7 @@ namespace MultiSupplierMTPlugin.Providers.Xunfei
             textBoxApiId.Text = _secureSettings.AppId;
             textBoxApiKey.Text = _secureSettings.ApiKey;
             textApiSecret.Text = _secureSettings.ApiSecret;
-            
+
             commonBottomControl.Init(this, _generalSettings.Checked, _service.ApiDocLink, linkLabelCheck_LinkClicked, Controls);
         }
 
@@ -86,7 +86,8 @@ namespace MultiSupplierMTPlugin.Providers.Xunfei
 
         private async Task linkLabelCheck_LinkClicked()
         {
-            await _service.Check(new Options(new GeneralSettings(), new SecureSettings() {
+            await _service.Check(new Options(new GeneralSettings(), new SecureSettings()
+            {
                 AppId = textBoxApiId.Text,
                 ApiKey = textBoxApiKey.Text,
                 ApiSecret = textApiSecret.Text

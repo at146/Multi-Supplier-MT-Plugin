@@ -4,7 +4,7 @@
 
     class LocalizedKeyCommon : LocalizedKeyBase
     {
-        public LocalizedKeyCommon(string name) : base(name) 
+        public LocalizedKeyCommon(string name) : base(name)
         {
         }
 
@@ -25,8 +25,8 @@
         public static LocalizedKeyCommon ProviderType_NMT { get; private set; }
 
         [LocalizedValue("c7ac5607-a8bc-4367-a681-e02441d4017e", "LLM", "大语言模型")]
-        public static LocalizedKeyCommon ProviderType_LLM { get; private set; }       
-        
+        public static LocalizedKeyCommon ProviderType_LLM { get; private set; }
+
 
         [LocalizedValue("167c4588-e75f-440e-8948-9baab3d30199", "Microsoft", "Microsoft")]
         public static LocalizedKeyCommon Provider_Microsoft_BuiltIn { get; private set; }
@@ -396,7 +396,7 @@
 
 
 
-       
+
 
         [LocalizedValue("0ea6f41c-5f2d-4dea-96f2-7c5fe5323c48", "Insert Source Language", "插入源语言")]
         public static LocalizedKeyCommon TextBoxPromptMenu_SourceLanguage { get; private set; }

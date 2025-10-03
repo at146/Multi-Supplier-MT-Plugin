@@ -13,6 +13,6 @@ namespace MultiSupplierMTPlugin.Providers.GoogleBuiltIn
             AutoInit<LocalizedKey>();
         }
 
-        
+
     }
 }

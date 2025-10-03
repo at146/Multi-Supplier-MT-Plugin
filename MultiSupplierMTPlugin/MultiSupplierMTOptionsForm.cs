@@ -79,8 +79,8 @@ namespace MultiSupplierMTPlugin
 
             checkBoxTagsToEnd.Text = LLH.G(LLK.CheckBoxTagsToEnd);
             checkBoxNormalizeWhitespace.Text = LLH.G(LLK.CheckBoxNormalizeWhitespace);
-            
-            linkLabelCustomRequestLimit.Text = LLH.G(LLK.LinkLabelCustomRequestLimit); 
+
+            linkLabelCustomRequestLimit.Text = LLH.G(LLK.LinkLabelCustomRequestLimit);
             linkLabelCustomDisplayName.Text = LLH.G(LLK.LinkLabelCustomDisplayName);
             linkLabelStatsAndLog.Text = LLH.G(LLK.LinkLabelStatsAndLog);
             linkLabelTranslateCache.Text = LLH.G(LLK.LinkLabelTranslateCache);
@@ -122,7 +122,7 @@ namespace MultiSupplierMTPlugin
             checkBoxTranslateCache.Checked = _mtGeneralSettings.EnableCache;
 
             // 至少包含 en-US 和 zh-CN 两种内置语言
-            var languages = LLH.GetAvailableLanguages(); 
+            var languages = LLH.GetAvailableLanguages();
             comboBoxLanguages.Items.AddRange(languages);
             comboBoxLanguages.SelectedItem = languages.Contains(LLH.UILanguage) ? LLH.UILanguage : "en-US";
 
@@ -138,10 +138,10 @@ namespace MultiSupplierMTPlugin
             {
                 var service = ServiceHelper.GetServiceOrFallback(name);
                 var requestTypes = GetRequestTypes(service.IsXmlSupported, service.IsHtmlSupported);
-                
+
                 this.comboBoxRequestType.SelectedIndexChanged -= new System.EventHandler(this.comboBoxRequestType_SelectedIndexChanged);
                 comboBoxRequestType.DataSource = new BindingList<ComboBoxItem>(requestTypes);
-                this.comboBoxRequestType.SelectedIndexChanged += new System.EventHandler(this.comboBoxRequestType_SelectedIndexChanged);                
+                this.comboBoxRequestType.SelectedIndexChanged += new System.EventHandler(this.comboBoxRequestType_SelectedIndexChanged);
 
                 _canUpdateLastRequestType = false;
                 SelectComboBoxRequestType(_lastRequestType);
@@ -151,7 +151,7 @@ namespace MultiSupplierMTPlugin
                 {
                     _lastProvider = name;
                     var option = service.ShowConfig();
-                    OptionsHelper.SetProviderOptions(name, option);                    
+                    OptionsHelper.SetProviderOptions(name, option);
                 }
 
                 buttonOK.Enabled = service.IsAvailable;
@@ -159,11 +159,11 @@ namespace MultiSupplierMTPlugin
         }
 
         private void comboBoxRequestType_SelectedIndexChanged(object sender, EventArgs e)
-        {            
-            if (comboBoxRequestType.SelectedValue is RequestType selectedRequestType) 
+        {
+            if (comboBoxRequestType.SelectedValue is RequestType selectedRequestType)
             {
                 // 用户手动变更的才要更新，由于提供商改变而变更的不要更新
-                if(_canUpdateLastRequestType)
+                if (_canUpdateLastRequestType)
                     _lastRequestType = selectedRequestType;
 
                 // 但无论哪种方式引起的变更，都需要更新 CheckBox
@@ -290,9 +290,9 @@ namespace MultiSupplierMTPlugin
                 //先清除再选才能触发 SelectedIndexChanged 绑定事件
                 comboBoxRequestType.SelectedIndex = -1;
                 comboBoxRequestType.SelectedIndex = 0;
-            }            
+            }
         }
-        
+
         private void linkLabelCustomRequestLimit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             using (var form = new CustomLimit(_mtGeneralSettings, _mtSecureSettings, (string)comboBoxServiceProvider.SelectedValue))
@@ -393,7 +393,7 @@ namespace MultiSupplierMTPlugin
                 _mtGeneralSettings.UILanguage = (string)comboBoxLanguages.SelectedItem;
 
                 LoggingHelper.Enable = _mtGeneralSettings.EnableStatsAndLog;
-                
+
 
                 if (!_mtGeneralSettings.NeverShowTip && Math.Abs(_mtGeneralSettings.RuningTimes) % 10 == 0)
                 {

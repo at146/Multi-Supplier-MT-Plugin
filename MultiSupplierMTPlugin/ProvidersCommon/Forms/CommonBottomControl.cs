@@ -15,8 +15,8 @@ namespace MultiSupplierMTPlugin.ProviderdsCommon.Forms
     partial class CommonBottomControl : UserControl
     {
         private string buttonHelpUrl;
-        
-        private Func<Task> linkLabelCheckCallBack; 
+
+        private Func<Task> linkLabelCheckCallBack;
 
         private HashSet<Control> excludedControls;
         private ControlCollection includeControls;
@@ -34,7 +34,7 @@ namespace MultiSupplierMTPlugin.ProviderdsCommon.Forms
         }
 
 
-        public void Init(Form form, bool buttonOkState, string buttonHelpUrl,  Func<Task> linkLabelCheckCallBack,
+        public void Init(Form form, bool buttonOkState, string buttonHelpUrl, Func<Task> linkLabelCheckCallBack,
             ControlCollection includeControls, IEnumerable<Control> excludedControls = null)
         {
             progressBar.Visible = false;
@@ -52,8 +52,8 @@ namespace MultiSupplierMTPlugin.ProviderdsCommon.Forms
         }
 
 
-        public bool ButtonOkState 
-        { 
+        public bool ButtonOkState
+        {
             get { return buttonOK.Enabled; }
 
             set { buttonOK.Enabled = value; }
@@ -71,10 +71,10 @@ namespace MultiSupplierMTPlugin.ProviderdsCommon.Forms
         public void ShowLabelResult(bool success, string msg)
         {
             if (success)
-            {                
+            {
                 labelSuccess.Text = msg;
             }
-            else 
+            else
             {
                 linkLabelFailed.Text = msg;
             }
@@ -121,7 +121,7 @@ namespace MultiSupplierMTPlugin.ProviderdsCommon.Forms
         {
             foreach (var kvp in originalControlStates)
             {
-                    kvp.Key.Enabled = kvp.Value;
+                kvp.Key.Enabled = kvp.Value;
             }
         }
 

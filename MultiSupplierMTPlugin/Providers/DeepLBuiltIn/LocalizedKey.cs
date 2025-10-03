@@ -13,6 +13,6 @@ namespace MultiSupplierMTPlugin.Providers.DeepLBuiltIn
             AutoInit<LocalizedKey>();
         }
 
-        
+
     }
 }

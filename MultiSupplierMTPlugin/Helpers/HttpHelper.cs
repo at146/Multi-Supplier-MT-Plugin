@@ -20,7 +20,7 @@ namespace MultiSupplierMTPlugin.Helpers
 
     class HttpRequestBuilder
     {
-        private readonly HttpClient _client;        
+        private readonly HttpClient _client;
         private readonly UriBuilder _uriBuilder;
         private readonly HttpRequestMessage _request;
         private readonly List<KeyValuePair<string, string>> _queryParams;
@@ -79,12 +79,12 @@ namespace MultiSupplierMTPlugin.Helpers
         }
 
         public HttpRequestBuilder AddQueryIf(bool condition, string key, string value)
-        { 
+        {
             return condition ? AddQuery(key, value) : this;
         }
 
         public HttpRequestBuilder AddQueriesIf(bool condition, IEnumerable<KeyValuePair<string, string>> queries)
-        { 
+        {
             return condition ? AddQueries(queries) : this;
         }
 
@@ -141,8 +141,8 @@ namespace MultiSupplierMTPlugin.Helpers
         }
 
         public async Task<T> ReceiveJson<T>(CancellationToken cancellationToken = default)
-        {            
-            var content = await SendAsync(cancellationToken);            
+        {
+            var content = await SendAsync(cancellationToken);
 
             try
             {

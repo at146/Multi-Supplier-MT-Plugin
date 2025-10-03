@@ -46,7 +46,7 @@ namespace MultiSupplierMTPlugin.Providers.DeepLX
         private void Localized()
         {
             Text = LLH.G(LLK.DeepLX);
-            
+
             labelServer.Text = LLH.G(LLK.LabelServer);
 
             linkLabelAuthKey.Text = LLH.G(LLK.LinkLabelAuthKey);
@@ -127,9 +127,9 @@ namespace MultiSupplierMTPlugin.Providers.DeepLX
             //    endpoint = "Official";
             //}
 
-            await _service.Check( new Options(
-                    new GeneralSettings() { Server = textBoxServer.Text, Endpoint = endpoint}, 
-                    new SecureSettings() { AuthKey = textBoxAuthKey.Text}));
+            await _service.Check(new Options(
+                    new GeneralSettings() { Server = textBoxServer.Text, Endpoint = endpoint },
+                    new SecureSettings() { AuthKey = textBoxAuthKey.Text }));
         }
 
         private void linkLabelAuthKey_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

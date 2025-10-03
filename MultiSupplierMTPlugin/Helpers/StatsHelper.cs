@@ -51,7 +51,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     }
                 }
                 catch (Exception ex)
-                {                    
+                {
                     _useFallback = true;
                     LoggingHelper.Warn("Database Stats initialization failed. Use the memory Stats: " + ex.Message);
                 }

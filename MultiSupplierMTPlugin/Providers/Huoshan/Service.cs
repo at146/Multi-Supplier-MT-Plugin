@@ -85,11 +85,11 @@ namespace MultiSupplierMTPlugin.Providers.Huoshan
             byte[] jsonRequestBytes = Encoding.UTF8.GetBytes(jsonRequestBody);
 
             HttpMethod method = HttpMethod.Post;
-            
+
             string _host = "translate.volcengineapi.com";
             string _path = "/";
-            string query = Signer.GetQueryString(new List<KeyValuePair<string, string>>() 
-            { 
+            string query = Signer.GetQueryString(new List<KeyValuePair<string, string>>()
+            {
                 new KeyValuePair<string, string>("Action", "TranslateText"),
                 new KeyValuePair<string, string>("Version", "2020-06-01")
             });
@@ -156,7 +156,7 @@ namespace MultiSupplierMTPlugin.Providers.Huoshan
 
                 string method,
                 string _host,
-                string _path, 
+                string _path,
                 string query,
 
                 string contentType,
@@ -184,7 +184,7 @@ namespace MultiSupplierMTPlugin.Providers.Huoshan
 
                 string hashCanonicalString = ToHexString(HashSha256(Encoding.UTF8.GetBytes(canonicalStringBuilder)));
                 string signString = $"HMAC-SHA256\n{xDate}\n{credentialScope}\n{hashCanonicalString}";
-                
+
                 byte[] signKey = GenSigningSecretKeyV4(_sk, shortXDate, _region, _service);
 
                 string signature = ToHexString(HmacSha256(signKey, signString));

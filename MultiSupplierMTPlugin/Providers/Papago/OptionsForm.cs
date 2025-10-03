@@ -83,7 +83,8 @@ namespace MultiSupplierMTPlugin.Providers.Papago
         private async Task linkLabelCheck_LinkClicked()
         {
             await _service.Check(
-                new Options(new GeneralSettings(), new SecureSettings() {
+                new Options(new GeneralSettings(), new SecureSettings()
+                {
                     ClientID = textBoxClientID.Text,
                     ClientSecret = textBoxClientSecret.Text
                 }));

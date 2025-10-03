@@ -19,7 +19,7 @@ namespace MultiSupplierMTPlugin.Providers.Baidu
 
         private MultiSupplierMTSecureSettings _mtSecureSettings;
 
-        public OptionsForm(Service service, GeneralSettings generalSettings, SecureSettings secureSettings, 
+        public OptionsForm(Service service, GeneralSettings generalSettings, SecureSettings secureSettings,
             MultiSupplierMTGeneralSettings mtGeneralSettings, MultiSupplierMTSecureSettings mtSecureSettings)
         {
             InitializeComponent();
@@ -64,7 +64,7 @@ namespace MultiSupplierMTPlugin.Providers.Baidu
             void onOptionsChanged(object sender, EventArgs e)
             {
                 if (
-                    _secureSettings.AppId != textBoxAppId.Text||
+                    _secureSettings.AppId != textBoxAppId.Text ||
                     _secureSettings.AppKey != textBoxAppKey.Text
                 )
                 {
@@ -84,7 +84,7 @@ namespace MultiSupplierMTPlugin.Providers.Baidu
         {
             await _service.Check(
                 new Options(
-                    new GeneralSettings(), 
+                    new GeneralSettings(),
                     new SecureSettings() { AppId = textBoxAppId.Text, AppKey = textBoxAppKey.Text }));
         }
 

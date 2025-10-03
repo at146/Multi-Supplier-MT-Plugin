@@ -4,7 +4,7 @@ namespace MultiSupplierMTPlugin.Providers.Anthropic
 {
     class SupportLang
     {
-        public static readonly Dictionary<string, string>  Dic = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> Dic = new Dictionary<string, string>
         {
             {"zho-CN", "Chinese (Simplified)"},
             {"zho-TW", "Chinese (Traditional)"},

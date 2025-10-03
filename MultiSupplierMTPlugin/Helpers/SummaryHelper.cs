@@ -13,7 +13,7 @@ namespace MultiSupplierMTPlugin.Helpers
     {
         private static readonly object _lockObj = new object();
 
-        private static readonly ConcurrentDictionary <string, string> _summaryCache = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> _summaryCache = new ConcurrentDictionary<string, string>();
 
         public static string ReadFromFile(string filePath)
         {
@@ -52,7 +52,7 @@ namespace MultiSupplierMTPlugin.Helpers
                 return true;
             }
             catch
-            { 
+            {
                 summary = null;
                 return false;
             }
@@ -75,7 +75,7 @@ namespace MultiSupplierMTPlugin.Helpers
                 }
 
                 providerCloneOptions = providerCloneOptions.Clone();
-                
+
                 var bSettings = providerCloneOptions.GeneralSettings as LLMBaseGeneralSettings;
 
                 var summaryGeneratePrompt = mtOptions.GeneralSettings.LLMCommon.SummaryGeneratePrompt;
@@ -84,7 +84,7 @@ namespace MultiSupplierMTPlugin.Helpers
                 bSettings.PromptTemplateId = "";
 
                 bSettings.SystemPrompt = "You are a helpful AI designed for generating text summaries.";
-                bSettings.UserPrompt = summaryGeneratePrompt.Replace("{{summary-text}}", "").Replace("{{summary-text!}}", "");                
+                bSettings.UserPrompt = summaryGeneratePrompt.Replace("{{summary-text}}", "").Replace("{{summary-text!}}", "");
 
                 string summary = Task.Run(async () =>
                 {

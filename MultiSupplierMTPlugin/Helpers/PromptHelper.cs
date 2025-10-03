@@ -12,7 +12,7 @@ using LLKC = MultiSupplierMTPlugin.Localized.LocalizedKeyCommon;
 
 namespace MultiSupplierMTPlugin.Helpers
 {
-    class PromptHelper 
+    class PromptHelper
     {
         private const string _GLOSSARY_TEXT_KEY = "glossary-text";
 
@@ -36,9 +36,9 @@ namespace MultiSupplierMTPlugin.Helpers
 
         private const string _BELOW_TEXT_KEY = "below-text";
 
-        private static readonly HashSet<string> _KNOWN_PLACEHOLDER_NAMES = new HashSet<string>() 
-        { 
-            _GLOSSARY_TEXT_KEY, 
+        private static readonly HashSet<string> _KNOWN_PLACEHOLDER_NAMES = new HashSet<string>()
+        {
+            _GLOSSARY_TEXT_KEY,
             _SOURCE_LANGUAGE_KEY, _TARGET_LANGUAGE_KEY,
             _SOURCE_TEXT_KEY, _TARGET_TEXT_KEY,
             _TM_SOURCE_TEXT_KEY, _TM_TARGET_TEXT_KEY,
@@ -100,30 +100,30 @@ namespace MultiSupplierMTPlugin.Helpers
             return menu;
         }
 
-        
 
 
-        public static (string, string)  Parse(
+
+        public static (string, string) Parse(
             string systemPrompt, string userPrompt,
 
             MultiSupplierMTOptions mtOptions,
-            
-            ProviderOptions providerOptions,           
+
+            ProviderOptions providerOptions,
             Dictionary<string, string> supportLanguages,
             MultiSupplierMTService service,
 
-            List<string> texts, 
+            List<string> texts,
             string srcLang, string tgtLang,
             List<string> tmSources, List<string> tmTargets,
             MTRequestMetadata metaData
             )
         {
             // 解决 xml 反序列化后换行符总是变成 \n
-            systemPrompt = systemPrompt.Replace(Environment.NewLine, "\n").Replace("\n", Environment.NewLine); 
+            systemPrompt = systemPrompt.Replace(Environment.NewLine, "\n").Replace("\n", Environment.NewLine);
             userPrompt = userPrompt.Replace(Environment.NewLine, "\n").Replace("\n", Environment.NewLine);
 
             var cSettings = mtOptions.GeneralSettings.LLMCommon;
-            var bSettings = providerOptions.GeneralSettings as LLMBaseGeneralSettings;            
+            var bSettings = providerOptions.GeneralSettings as LLMBaseGeneralSettings;
 
             var promptBuilder = new PromptBuilder(systemPrompt, userPrompt, _KNOWN_PLACEHOLDER_NAMES);
 
@@ -133,8 +133,8 @@ namespace MultiSupplierMTPlugin.Helpers
                 var glsFilePath = cSettings.GlossaryFilePath;
                 var glsDelimiter = cSettings.GlossaryDelimiter;
 
-                string glossary = GlossaryHelper.ReadGlossary(glsFilePath, srcLang, tgtLang, glsDelimiter, "utf-8", true) ;
-                
+                string glossary = GlossaryHelper.ReadGlossary(glsFilePath, srcLang, tgtLang, glsDelimiter, "utf-8", true);
+
                 promptBuilder.SetPlaceholder(_GLOSSARY_TEXT_KEY, glossary);
             }
 
@@ -174,7 +174,7 @@ namespace MultiSupplierMTPlugin.Helpers
             if (promptBuilder.HasPlaceholder(_TM_SOURCE_TEXT_KEY))
             {
                 if (tmSources == null) throw new Exception($"{_TM_SOURCE_TEXT_KEY} Placeholders require memoQ min version 10.0, and enable \"Send best fuzzy TM\" in memoq settings");
-                
+
                 promptBuilder.SetPlaceholder(_TM_SOURCE_TEXT_KEY, tmSources[0]);
             }
 
@@ -182,12 +182,12 @@ namespace MultiSupplierMTPlugin.Helpers
             if (promptBuilder.HasPlaceholder(_TM_TARGET_TEXT_KEY))
             {
                 if (tmTargets == null) throw new Exception($"{_TM_TARGET_TEXT_KEY} Placeholders require memoQ min version 10.0, and enable \"Send best fuzzy TM\" in memoq settings");
-                
+
                 promptBuilder.SetPlaceholder(_TM_TARGET_TEXT_KEY, tmTargets[0]);
             }
 
             if (promptBuilder.HasPlaceholder(_FULL_TEXT_KEY) || promptBuilder.HasPlaceholder(_SUAMMARY_TEXT_KEY) ||
-                promptBuilder.HasPlaceholder(_ABOVE_TEXT_KEY) || promptBuilder.HasPlaceholder(_BELOW_TEXT_KEY) || 
+                promptBuilder.HasPlaceholder(_ABOVE_TEXT_KEY) || promptBuilder.HasPlaceholder(_BELOW_TEXT_KEY) ||
                 promptBuilder.HasPlaceholder(_TARGET_TEXT_KEY))
             {
                 // 全文、摘要、上下文、目标文本需要 memoQ 版本大于 9.14 才能获取到 metaData
@@ -279,7 +279,7 @@ namespace MultiSupplierMTPlugin.Helpers
             while (true)
             {
                 var currentIndex = ContextHelper.Instance.GetCurrentIndex(prjGuid, docGuid, srcLang, tgtLang);
-               
+
                 var diff = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - currentIndex.UtcMs;
                 if (currentIndex.IndexStart != -1 && currentIndex.IndexEnd != -1 && diff < 1000)
                 {
@@ -330,7 +330,7 @@ namespace MultiSupplierMTPlugin.Helpers
         {
             foreach (var plhd in _systemPlaceholders)
             {
-                if(plhd.Name.Equals(name)) return true;
+                if (plhd.Name.Equals(name)) return true;
             }
 
             foreach (var plhd in _userPlaceholders)
@@ -360,7 +360,7 @@ namespace MultiSupplierMTPlugin.Helpers
         }
 
         public (string, string) BuildPrompts()
-        { 
+        {
             return (BuildSystemPrompt(), BuildUserPrompt());
         }
 
@@ -394,7 +394,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     IsSystem = isSystem
                 };
 
-                if(_knownPlaceholderNames.Contains(plhd.Name)) placeholders.Add(plhd);
+                if (_knownPlaceholderNames.Contains(plhd.Name)) placeholders.Add(plhd);
             }
 
             return placeholders;
@@ -447,5 +447,5 @@ namespace MultiSupplierMTPlugin.Helpers
 
             public bool IsSystem { get; set; }
         }
-    }   
+    }
 }

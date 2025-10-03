@@ -10,10 +10,10 @@ namespace MultiSupplierMTPlugin.Providers.YandexBuiltIn
     }
 
     class GeneralSettings : NMTBaseGeneralSettings
-    {   
+    {
     }
 
     class SecureSettings : NMTBaseSecureSettings
-    {        
+    {
     }
 }

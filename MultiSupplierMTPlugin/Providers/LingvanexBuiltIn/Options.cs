@@ -10,10 +10,10 @@ namespace MultiSupplierMTPlugin.Providers.LingvanexBuiltIn
     }
 
     class GeneralSettings : NMTBaseGeneralSettings
-    {   
+    {
     }
 
     class SecureSettings : NMTBaseSecureSettings
-    {        
+    {
     }
 }

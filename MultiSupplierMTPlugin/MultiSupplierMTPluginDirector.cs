@@ -91,7 +91,7 @@ namespace MultiSupplierMTPlugin
 
         public override string CopyrightText
         {
-            get  { return $"{_dllFileName}, Copyright (C) Juchia"; }
+            get { return $"{_dllFileName}, Copyright (C) Juchia"; }
         }
 
         public override Image DisplayIcon
@@ -132,7 +132,7 @@ namespace MultiSupplierMTPlugin
         {
             var mtOptions = GetOrInitializeOptions(args.PluginSettings);
 
-            var provider  =  mtOptions.GeneralSettings.CurrentServiceProvider;
+            var provider = mtOptions.GeneralSettings.CurrentServiceProvider;
             var service = ServiceHelper.GetServiceOrFallback(provider);
 
             return service.IsLanguagePairSupported(args.SourceLangCode, args.TargetLangCode);

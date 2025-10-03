@@ -8,7 +8,7 @@
         public virtual int MaxTokens { get; set; } = 4096;
         public virtual double Temperature { get; set; } = 1.0;
 
-        public virtual string Model { get; set; } = string.Empty;        
+        public virtual string Model { get; set; } = string.Empty;
         public virtual ModelItem[] UserModels { get; set; } = new ModelItem[0];
         public virtual string[] HidenBuildInModels { get; set; } = new string[0];
 
@@ -24,7 +24,7 @@
         public virtual int BathTranslateMaxSegments { get; set; } = 10;
         public virtual int BathTranslateMaxCharacters { get; set; } = 3000;
         public virtual BathTranslateSchema BathTranslateSchema { get; set; } = BathTranslateSchema.Shorter;
-        public virtual BathTranslateResponseFormat BathTranslateResponseFormat { get; set; } = BathTranslateResponseFormat.JSON_Object;        
+        public virtual BathTranslateResponseFormat BathTranslateResponseFormat { get; set; } = BathTranslateResponseFormat.JSON_Object;
     }
 
     class LLMBaseSecureSettings : ProviderSecureSettings

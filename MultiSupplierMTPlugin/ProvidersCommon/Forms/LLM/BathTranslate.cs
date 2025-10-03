@@ -67,7 +67,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
             numericUpDownMaxSegments.Value = _llmBaseSettings.BathTranslateMaxSegments;
             numericUpDownMaxCharacters.Value = _llmBaseSettings.BathTranslateMaxCharacters;
 
-            if(_llmBaseSettings.BathTranslateSchema == BathTranslateSchema.Longer)
+            if (_llmBaseSettings.BathTranslateSchema == BathTranslateSchema.Longer)
                 radioButtonLonger.Checked = true;
             else
                 radioButtonShorter.Checked = true;

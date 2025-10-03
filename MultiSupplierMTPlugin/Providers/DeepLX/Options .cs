@@ -18,6 +18,6 @@ namespace MultiSupplierMTPlugin.Providers.DeepLX
 
     class SecureSettings : NMTBaseSecureSettings
     {
-        public string AuthKey { get; set; } = string.Empty;        
+        public string AuthKey { get; set; } = string.Empty;
     }
 }

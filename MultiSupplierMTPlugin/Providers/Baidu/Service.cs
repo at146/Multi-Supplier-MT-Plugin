@@ -77,7 +77,7 @@ namespace MultiSupplierMTPlugin.Providers.Baidu
 
             string salt = Guid.NewGuid().ToString();
             string sign = GetSign(s.AppId, s.AppKey, salt, texts[0]);
-            
+
             var transResponse = await _httpClient.Get(_baseUrl)
                 .AddQuery("q", texts[0])
                 .AddQuery("from", SupportLang.Dic[srcLangCode])
@@ -109,16 +109,16 @@ namespace MultiSupplierMTPlugin.Providers.Baidu
             string str = appId + text + salt + appKey;
 
             MD5 md5 = MD5.Create();
-            
+
             byte[] byteOld = Encoding.UTF8.GetBytes(str);
             byte[] byteNew = md5.ComputeHash(byteOld);
-           
+
             StringBuilder sb = new StringBuilder();
             foreach (byte b in byteNew)
             {
                 sb.Append(b.ToString("x2"));
             }
-            
+
             return sb.ToString();
         }
     }

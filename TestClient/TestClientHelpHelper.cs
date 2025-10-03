@@ -14,7 +14,7 @@ namespace TestClient
         //constructor for Init.
         public TestClientHelpHelper()
         {
-            
+
         }
 
         //needed to initialize the HelpHelperService for kilgray utils calls.
@@ -22,7 +22,7 @@ namespace TestClient
         static TestClientHelpHelper()
         {
             Initialize(new TestClientHelpHelper(), 9, 5, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "en");
-        } 
+        }
 
         public static void TestClientShowHelp(string page)
         {
@@ -32,7 +32,7 @@ namespace TestClient
         //show English web help. 显示英文网页帮助。
         protected override void showHelp(string page)
         {
-            string language =  "en";
+            string language = "en";
             string url = GetWebHelpUrl(language, page, DefaultTopic);
 
             Process.Start(url);

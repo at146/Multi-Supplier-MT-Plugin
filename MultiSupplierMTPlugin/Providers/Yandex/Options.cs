@@ -23,7 +23,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
 
         public string Model { get; set; } = string.Empty;
 
-        public bool Speller { get; set; } = false;   
+        public bool Speller { get; set; } = false;
     }
 
     class SecureSettings : NMTBaseSecureSettings

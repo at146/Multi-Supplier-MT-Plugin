@@ -84,7 +84,7 @@ namespace MultiSupplierMTPlugin.Providers.MicrosoftBuiltIn
             var token = await _httpClient.Get(_tokenUrl)
                 .ReceiveString(cToken);
 
-            List <TranslationRequestItem> translationRequestItems = new List<TranslationRequestItem>();
+            List<TranslationRequestItem> translationRequestItems = new List<TranslationRequestItem>();
             foreach (string text in texts)
             {
                 translationRequestItems.Add(new TranslationRequestItem { Text = text });

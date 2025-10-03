@@ -120,7 +120,7 @@ namespace MultiSupplierMTPlugin.Helpers
             [BsonId]
             public string Id { get; set; }
 
-            public string Provider { get; set; } 
+            public string Provider { get; set; }
 
             public string Format { get; set; }
 

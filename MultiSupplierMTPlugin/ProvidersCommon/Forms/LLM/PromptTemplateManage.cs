@@ -62,7 +62,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
             groupBoxSingleTranslate.Text = LLH.G(LLK.GroupBoxSingleTranslate);
             labelSystemPrompt.Text = LLH.G(LLK.LabelSystemPrompt);
             labelUserPrompt.Text = LLH.G(LLK.LabelUserPrompt);
-            
+
             toolTip.SetToolTip(labelSystemPrompt, LLH.G(LLKC.ToolTip_LLMPromptTip));
             toolTip.SetToolTip(labelUserPrompt, LLH.G(LLKC.ToolTip_LLMPromptTip));
 
@@ -72,7 +72,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
             groupBoxBathTranslate.Text = LLH.G(LLK.GroupBoxBathTranslate);
             labelBathTranslateSystemPrompt.Text = LLH.G(LLK.LabelBathTranslateSystemPrompt);
             labelBathTranslateUserPrompt.Text = LLH.G(LLK.LabelBathTranslateUserPrompt);
-            
+
             toolTip.SetToolTip(labelBathTranslateSystemPrompt, LLH.G(LLKC.ToolTip_LLMPromptTip));
             toolTip.SetToolTip(labelBathTranslateUserPrompt, LLH.G(LLKC.ToolTip_LLMPromptTip));
 
@@ -90,7 +90,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
                 .Select(p => p.Clone())
                 .OrderBy(p => p.Name, new NaturalSortComparer())
                 .ToList());
-            
+
             comboBoxTemplates.DataSource = _promptTemplates;
             comboBoxTemplates.DisplayMember = "Name";
 
@@ -115,7 +115,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
             buttonRename.Enabled = hasSel;
 
             textBoxTemplate.Enabled = hasSelAndRenaming;
-            comboBoxTemplates.Enabled = noEmptyNoRenaming;            
+            comboBoxTemplates.Enabled = noEmptyNoRenaming;
 
             textBoxSystemPrompt.Enabled = hasSelNoRenaming;
             textBoxUserPrompt.Enabled = hasSelNoRenaming;
@@ -164,7 +164,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
 
             int index = comboBoxTemplates.SelectedIndex;
             if (index >= 0 && index < _promptTemplates.Count)
-            { 
+            {
                 _promptTemplates.RemoveAt(index);
                 UpdateControlState();
                 comboBoxTemplates_SelectedIndexChanged(comboBoxTemplates, EventArgs.Empty);
@@ -214,7 +214,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
         private void textBoxUserPrompt_TextChanged(object sender, EventArgs e)
         {
             if (comboBoxTemplates.SelectedItem is PromptTemplate prompt)
-            { 
+            {
                 prompt.UserPrompt = textBoxUserPrompt.Text;
                 textBoxUserPrompt.ScrollBars = textBoxUserPrompt.Lines.Length > 6 ? ScrollBars.Vertical : ScrollBars.None;
             }

@@ -10,10 +10,10 @@ namespace MultiSupplierMTPlugin.Providers.GoogleBuiltIn
     }
 
     class GeneralSettings : NMTBaseGeneralSettings
-    {   
+    {
     }
 
     class SecureSettings : NMTBaseSecureSettings
-    {        
+    {
     }
 }

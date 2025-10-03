@@ -21,13 +21,13 @@ namespace MultiSupplierMTPlugin.Helpers
 
         // 记录文档的内容
         private readonly ConcurrentDictionary<string, ConcurrentDictionary<int, Content>> _docDic = new ConcurrentDictionary<string, ConcurrentDictionary<int, Content>>();
-        
+
         // 记录文档的最大索引
         private readonly ConcurrentDictionary<string, int> _lastIndexDic = new ConcurrentDictionary<string, int>(); // TODO：应该和 docDic 合并，否则两者不是同步的
-        
+
         // 记录文档当前激活的索引
         private readonly ConcurrentDictionary<string, CurrentIndex> _currentIndexDic = new ConcurrentDictionary<string, CurrentIndex>();
-        
+
         // 记录文档的原始名字
         private readonly ConcurrentDictionary<string, string> _docNameDic = new ConcurrentDictionary<string, string>();
 
@@ -40,7 +40,7 @@ namespace MultiSupplierMTPlugin.Helpers
             // 初始化请求对象
             _request = new MemoqRequest(this, dllFileName);
 
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 try
                 {
@@ -81,10 +81,10 @@ namespace MultiSupplierMTPlugin.Helpers
         public CurrentIndex GetCurrentIndex(string prjGuid, string docGuid, string srcLang, string tgtLang)
         {
             string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
-                
+
             if (!_currentIndexDic.TryGetValue(key, out var currentIndex))
-                throw new Exception("Wait for the document to reload and reactivate the current segment, or document load fails, reopen the document."); 
-            
+                throw new Exception("Wait for the document to reload and reactivate the current segment, or document load fails, reopen the document.");
+
             return currentIndex;
         }
 
@@ -94,7 +94,7 @@ namespace MultiSupplierMTPlugin.Helpers
 
             if (!_currentIndexDic.ContainsKey(key))
                 throw new Exception("document load fails, reopen the document.");
-              
+
             _currentIndexDic[key] = new CurrentIndex()
             {
                 IndexStart = -1,
@@ -121,7 +121,7 @@ namespace MultiSupplierMTPlugin.Helpers
         {
             CheckConnect();
 
-            return GetContext(prjGuid, docGuid, srcLang, tgtLang, 
+            return GetContext(prjGuid, docGuid, srcLang, tgtLang,
                 segmIndex, maxSegm, maxChar, includeSrc, includeTgt, true);
         }
 
@@ -130,7 +130,7 @@ namespace MultiSupplierMTPlugin.Helpers
         {
             CheckConnect();
 
-            return GetContext(prjGuid, docGuid, srcLang, tgtLang, 
+            return GetContext(prjGuid, docGuid, srcLang, tgtLang,
                 segmIndex, maxSegm, maxChar, includeSrc, includeTgt, false);
         }
 
@@ -193,7 +193,7 @@ namespace MultiSupplierMTPlugin.Helpers
 
             if (!_docDic.TryGetValue(key, out var doc) || !_lastIndexDic.TryGetValue(key, out var lastIndex))
                 throw new Exception("document load fails, reopen the document.");
-            
+
             if ((!includeSrc && !includeTgt) || (maxSegm <= 0 && maxChar <= 0)) return "";
 
             int direction = isAbove ? -1 : 1;
@@ -206,7 +206,7 @@ namespace MultiSupplierMTPlugin.Helpers
             {
                 if (!doc.TryGetValue(current, out Content content))
                     throw new Exception("document load fails, reopen the document.");
-                
+
                 // 跳过空白句段
                 bool srcWhiteSpace = string.IsNullOrWhiteSpace(content.Source);
                 bool tgtWhiteSpace = string.IsNullOrWhiteSpace(content.Target);
@@ -218,8 +218,8 @@ namespace MultiSupplierMTPlugin.Helpers
                 }
 
                 // 字符计算，不包括额外添加的换行符。
-                charCount += includeSrc ? content.Source.Length: 0;
-                charCount += includeTgt ? content.Target.Length: 0;
+                charCount += includeSrc ? content.Source.Length : 0;
+                charCount += includeTgt ? content.Target.Length : 0;
                 if (maxChar > 0 && charCount > maxChar) break;
 
                 if (isAbove)
@@ -269,7 +269,7 @@ namespace MultiSupplierMTPlugin.Helpers
             {
                 _lastIndexDic[key] = segmIndex;
             }
-        } 
+        }
 
 
         private string GetKey(PreviewPart previewPart)
@@ -307,7 +307,7 @@ namespace MultiSupplierMTPlugin.Helpers
                 string key = GetKey(firstPart);
 
                 //if (currentIndexDic.ContainsKey(key))
-                    //LoggingHelper.Log($"HandleChangeHighlightRequest 修改前：{currentIndexDic[key].IndexStart}, {currentIndexDic[key].IndexEnd}");
+                //LoggingHelper.Log($"HandleChangeHighlightRequest 修改前：{currentIndexDic[key].IndexStart}, {currentIndexDic[key].IndexEnd}");
 
                 _currentIndexDic[key] = new CurrentIndex()
                 {
@@ -414,7 +414,7 @@ namespace MultiSupplierMTPlugin.Helpers
         #endregion
     }
 
-    class CurrentIndex 
+    class CurrentIndex
     {
         public int IndexStart { get; set; }
 
@@ -459,9 +459,9 @@ namespace MultiSupplierMTPlugin.Helpers
         public MemoqRequest(ContextHelper callbackHandler, String dllFileName)
         {
             this._callbackHandler = callbackHandler;
-            
+
             var guidSuffix = BitConverter.ToString(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(dllFileName))).Replace("-", "").ToLower().Substring(0, 12);
-            
+
             this._previewToolId = Guid.Parse($"c6f2be44-e33c-478e-ba23-{guidSuffix}");
 
             this._previewToolDescription = $"{dllFileName}, Provides full-text, summary-text, above-text, below-text, and target-text feature for Multi Supplier MT Plugin";

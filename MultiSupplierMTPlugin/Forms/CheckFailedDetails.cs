@@ -30,7 +30,7 @@ namespace MultiSupplierMTPlugin.Forms
         {
             Text = LLH.G(LLK.Form);
 
-            buttonOK.Text = LLH.G(LLKC.ButtonOK); 
+            buttonOK.Text = LLH.G(LLKC.ButtonOK);
         }
 
         private void LoadOptions()

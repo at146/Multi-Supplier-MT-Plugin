@@ -15,8 +15,8 @@ namespace MultiSupplierMTPlugin.Providers.OpenAI
         private static readonly HttpClient _httpClient = new HttpClient();
 
 
-        public Service(MultiSupplierMTOptions mtOptions, ProviderOptions options) 
-            : base(mtOptions, options) 
+        public Service(MultiSupplierMTOptions mtOptions, ProviderOptions options)
+            : base(mtOptions, options)
         {
         }
 
@@ -40,10 +40,10 @@ namespace MultiSupplierMTPlugin.Providers.OpenAI
             set { _generalSettings.EnableBathTranslate = value; }
         }
 
-        public override int MaxSegments 
+        public override int MaxSegments
         {
             get { return IsBatchSupported ? _generalSettings.BathTranslateMaxSegments : 1; }
-            
+
             // 然而，这里并不能保存到配置文件
             set { _generalSettings.BathTranslateMaxSegments = value; }
         }
@@ -79,7 +79,7 @@ namespace MultiSupplierMTPlugin.Providers.OpenAI
 
         public override Dictionary<string, string> SupportLangDic { get; set; } = SupportLang.Dic;
 
-        public override ModelItem[] BuildInModels { get; set; } =  new string[]
+        public override ModelItem[] BuildInModels { get; set; } = new string[]
         {
             "gpt-3.5-turbo",
             "gpt-3.5-turbo-0125",
@@ -145,10 +145,10 @@ namespace MultiSupplierMTPlugin.Providers.OpenAI
         }
 
         protected override async Task<string> TranslateAsync(
-            GeneralSettings g, SecureSettings s, 
+            GeneralSettings g, SecureSettings s,
             string systemPrompt, string userPrompt,
-            List<string> texts, string srcLang, string tgtLang, 
-            List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, 
+            List<string> texts, string srcLang, string tgtLang,
+            List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData,
             CancellationToken cToken)
         {
             var localizedName = ServiceLocalizedNameHelper.Get(UniqueName);

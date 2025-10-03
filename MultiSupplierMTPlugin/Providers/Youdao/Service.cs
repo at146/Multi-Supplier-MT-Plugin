@@ -73,7 +73,7 @@ namespace MultiSupplierMTPlugin.Providers.Youdao
         {
             var (g, s) = ResolveOptions(tempOptions);
 
-            List<KeyValuePair<string, string>> formParameters = new List<KeyValuePair<string, string>>(); 
+            List<KeyValuePair<string, string>> formParameters = new List<KeyValuePair<string, string>>();
 
             TimeSpan ts = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             long millis = (long)ts.TotalMilliseconds;

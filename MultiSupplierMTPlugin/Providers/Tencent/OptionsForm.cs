@@ -82,7 +82,7 @@ namespace MultiSupplierMTPlugin.Providers.Tencent
 
         private async Task linkLabelCheck_LinkClicked()
         {
-            await _service.Check(new Options(new GeneralSettings(), new SecureSettings() 
+            await _service.Check(new Options(new GeneralSettings(), new SecureSettings()
             {
                 SecretId = textBoxSecretId.Text,
                 SecretKey = textBoxSecretKey.Text

@@ -55,7 +55,7 @@ namespace MultiSupplierMTPlugin.Providers.Youdao
         {
             textBoxAppKey.Text = _secureSettings.AppKey;
             textBoxAppSecret.Text = _secureSettings.AppSecret;
-            
+
             commonBottomControl.Init(this, _generalSettings.Checked, _service.ApiDocLink, linkLabelCheck_LinkClicked, Controls);
         }
 
@@ -82,7 +82,8 @@ namespace MultiSupplierMTPlugin.Providers.Youdao
 
         private async Task linkLabelCheck_LinkClicked()
         {
-            await _service.Check(new Options(new GeneralSettings(), new SecureSettings() {
+            await _service.Check(new Options(new GeneralSettings(), new SecureSettings()
+            {
                 AppKey = textBoxAppKey.Text,
                 AppSecret = textBoxAppSecret.Text
             }));

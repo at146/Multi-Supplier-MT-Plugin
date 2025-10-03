@@ -65,8 +65,8 @@ namespace MultiSupplierMTPlugin
             var hasTm = tmSrcSegms != null && tmTgtSegms != null;
 
             //记录未翻译文本在原始列表中的位置，翻译后才能将结果放入原始位置
-            var untransOriginalIndices = new List<int>();  
-            
+            var untransOriginalIndices = new List<int>();
+
             var untransSrcTexts = new List<string>();                  //未翻译的句段纯文本列表
             var untransTmSrcTexts = hasTm ? new List<string>() : null; //未翻译句段关联的翻译记忆原文纯文本列表
             var untransTmTgtTexts = hasTm ? new List<string>() : null; //未翻译句段关联的翻译记忆译文纯文本列表
@@ -97,7 +97,7 @@ namespace MultiSupplierMTPlugin
             List<int> untransOriginalIndices, TranslationResult[] results)
         {
             bool hasTm = tmSrcSegms != null && tmTgtSegms != null;
-            List<string> srcTexts = srcSegms.Select(ConvertSegment2String).ToList();            
+            List<string> srcTexts = srcSegms.Select(ConvertSegment2String).ToList();
 
             for (int i = 0; i < srcTexts.Count; i++)
             {
@@ -141,7 +141,7 @@ namespace MultiSupplierMTPlugin
                     try
                     {
                         var batchTgtTexts = await TranslateCoreAsync(batchSrcTexts, batchTmSrcTexts, batchTmTgtTexts, metaData);
-                        
+
                         for (int i = 0; i < batchSrcTexts.Count; i++)
                         {
                             int untransIndex = startIndex + i;                        // 在未翻译列表中的索引
@@ -206,17 +206,17 @@ namespace MultiSupplierMTPlugin
             {
                 int segmCount = 0;
                 int charCount = 0;
-                
+
                 for (int i = startIndex; i < untransTexts.Count; i++)
                 {
                     int nextLength = untransTexts[i]?.Length ?? 0;
 
                     // 总是确保有一个句段，无论句段限制、字符限制是多少
                     bool isNotFirstSegment = segmCount > 0;
-                    
+
                     bool wouldExceedSegmentLimit = limitSegments && (segmCount + 1) > maxSegments;
                     bool wouldExceedCharLimit = limitCharacters && (charCount + nextLength) > maxCharacters;
-                    
+
                     if (isNotFirstSegment && (wouldExceedSegmentLimit || wouldExceedCharLimit))
                         break;
 
@@ -335,7 +335,7 @@ namespace MultiSupplierMTPlugin
             {
                 segment = SegmentXMLConverter.ConvertXML2Segment(translatedText, originalSegment.ITags);
             }
-            else if(_requestType == RequestType.OnlyFormattingWithHtml || _requestType == RequestType.BothFormattingAndTagsWithHtml)
+            else if (_requestType == RequestType.OnlyFormattingWithHtml || _requestType == RequestType.BothFormattingAndTagsWithHtml)
             {
                 segment = SegmentHtmlConverter.ConvertHtml2Segment(translatedText, originalSegment.ITags);
             }
@@ -384,9 +384,9 @@ namespace MultiSupplierMTPlugin
             {
                 try
                 {
-                    CacheHelper.Store(_providerService.UniqueName, _requestType.ToString(), _srcLangCode, _trgLangCode, 
+                    CacheHelper.Store(_providerService.UniqueName, _requestType.ToString(), _srcLangCode, _trgLangCode,
                         ConvertSegment2String(transunits[i].Source), ConvertSegment2String(transunits[i].Target));
-                    
+
                     stored[i] = i;
                 }
                 catch

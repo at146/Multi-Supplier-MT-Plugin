@@ -30,7 +30,7 @@ namespace DllGenerator
         private void buttonOutputPathSelect_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            { 
+            {
                 textBoxOutputDir.Text = folderBrowserDialog.SelectedPath;
             }
         }
@@ -96,16 +96,16 @@ namespace DllGenerator
                 return;
             }
 
-            MessageBox.Show($"generate {end-start+1} dll files done");
+            MessageBox.Show($"generate {end - start + 1} dll files done");
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 Process.Start(Path.GetFullPath(textBoxOutputDir.Text));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"output path open fail: \n\n{ex.Message}");
                 return;

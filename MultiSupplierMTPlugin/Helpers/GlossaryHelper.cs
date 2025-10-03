@@ -57,7 +57,7 @@ namespace MultiSupplierMTPlugin.Helpers
                     return cachedResult;
                 }
             }
-            
+
             Dictionary<string, string> result = new Dictionary<string, string>();
 
             using (var parser = new CsvTextFieldParser(path, Encoding.GetEncoding(charset)))
@@ -131,7 +131,7 @@ namespace MultiSupplierMTPlugin.Helpers
             return result;
         }
 
-        
+
         private static bool TryGetTermPair(string[] fields, Dictionary<string, int> fieldIndices, string srcLang, string tgtLang, out KeyValuePair<string, string> result)
         {
             if (fieldIndices.ContainsKey(_SOURCE_TERM_FIELD) && fieldIndices[_SOURCE_TERM_FIELD] < fields.Length &&
@@ -139,7 +139,7 @@ namespace MultiSupplierMTPlugin.Helpers
             {
                 string sourceTerm = fields[fieldIndices[_SOURCE_TERM_FIELD]];
                 string targetTerm = fields[fieldIndices[_TARGET_TERM_FIELD]];
-                
+
                 bool includeTerms = true;
 
                 if (fieldIndices.ContainsKey(_SOURCE_LANGUAGE_FIELD) && fieldIndices[_SOURCE_LANGUAGE_FIELD] < fields.Length)
@@ -760,7 +760,7 @@ namespace MultiSupplierMTPlugin.Helpers
         #endregion
     }
 
-    
+
     /// <summary>
     /// An exception that is thrown when the <see cref="CsvTextFieldParser.ReadFields"/> method cannot parse a row using the specified format.
     /// </summary>

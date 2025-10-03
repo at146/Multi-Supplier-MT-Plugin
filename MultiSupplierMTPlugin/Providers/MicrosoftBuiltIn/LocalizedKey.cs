@@ -13,6 +13,6 @@ namespace MultiSupplierMTPlugin.Providers.MicrosoftBuiltIn
             AutoInit<LocalizedKey>();
         }
 
-        
+
     }
 }

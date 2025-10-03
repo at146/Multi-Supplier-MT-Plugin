@@ -17,7 +17,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
         private MultiSupplierMTSecureSettings _mtSecureSettings;
 
         private LLMCommonGeneralSettings _llmSettings;
-        
+
         public PromptPlaceholders(MultiSupplierMTGeneralSettings mtGeneralSettings, MultiSupplierMTSecureSettings mtSecureSettings)
         {
             InitializeComponent();
@@ -114,7 +114,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Forms.LLM
 
             labelSummaryPrompt.Enabled = !manual;
             linkLabelSummaryCacheDir.Enabled = !manual;
-            textBoxSummaryPrompt.Enabled = !manual;            
+            textBoxSummaryPrompt.Enabled = !manual;
         }
 
         private void buttonGlossarySelect_Click(object sender, EventArgs e)

@@ -4,7 +4,7 @@ namespace MultiSupplierMTPlugin.Providers.Aliyun
 {
     class Options : ProviderOptions
     {
-        public Options() : base(new GeneralSettings(), new SecureSettings()){ }
+        public Options() : base(new GeneralSettings(), new SecureSettings()) { }
 
         public Options(GeneralSettings generalOptions, SecureSettings secureOptions) : base(generalOptions, secureOptions) { }
     }

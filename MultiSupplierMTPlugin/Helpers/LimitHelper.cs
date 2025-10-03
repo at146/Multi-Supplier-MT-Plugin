@@ -76,12 +76,12 @@ namespace MultiSupplierMTPlugin.Helpers
                     else
                     {
                         // 队列未满，
-                        
+
                         if (_requestTimestamps.Count > 0)
                         {
                             // 最近一个请求执行时间到当前时间的间隔
                             var timeSinceLastRequest = (now - _requestTimestamps.Last());
-                            
+
                             // 如果这个间隔小于最小间隔时间，需要等待
                             if (timeSinceLastRequest < _minIntervalMs)
                             {

@@ -41,7 +41,7 @@ namespace MultiSupplierMTPlugin.Providers.Yandex
     class GlossaryConfig
     {
         [JsonProperty("glossaryData")]
-        public GlossaryData GlossaryData { get; set; }         
+        public GlossaryData GlossaryData { get; set; }
     }
 
     class GlossaryData

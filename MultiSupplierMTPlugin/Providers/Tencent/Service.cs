@@ -83,17 +83,17 @@ namespace MultiSupplierMTPlugin.Providers.Tencent
 
             var jsonRequest = JsonConvert.SerializeObject(transRequest);
             var headers = BuildHeaders(s.SecretId, s.SecretKey, jsonRequest);
-            
+
             var transResponse = await _httpClient.Post(_baseUrl)
-                .AddHeaders(headers)               
+                .AddHeaders(headers)
                 .SetBodyJsonString(jsonRequest)
                 .ReceiveJson<TransResponse>(cToken);
-            
+
             if (transResponse.Response.Error != null)
             {
                 throw new Exception(transResponse.Response.Error.Message);
             }
-            
+
             return transResponse.Response.TargetTextList;
         }
 
@@ -124,16 +124,16 @@ namespace MultiSupplierMTPlugin.Providers.Tencent
             //参与签名的头部信息，至少包含 host 和 content-type 两个头部
             //头部 key 和 value 统一转成小写，并去掉首尾空格，按照 key:value\n 格式拼接；
             //多个头部，按照头部 key（小写）的 ASCII 升序进行拼接。
-            string canonicalHeaders = 
+            string canonicalHeaders =
                 "content-type:" + contentType + "\n"
-                +"host:" + host + "\n"
-                +"x-tc-action:" + action.ToLower() + "\n";
+                + "host:" + host + "\n"
+                + "x-tc-action:" + action.ToLower() + "\n";
             //参与签名的头部信息，说明此次请求有哪些头部参与了签名，
             //和 CanonicalHeaders 包含的头部内容是一一对应的。
             string signedHeaders = "content-type;host;x-tc-action";
             //即对 HTTP 请求正文做 SHA256 哈希，然后十六进制编码，最后编码串转换成小写字母。
             string hashedRequestPayload = SHA256Hex(requestPayload);
-            string canonicalRequest = 
+            string canonicalRequest =
                 httpRequestMethod + "\n"
                 + canonicalURI + "\n"
                 + canonicalQueryString + "\n"
@@ -151,7 +151,7 @@ namespace MultiSupplierMTPlugin.Providers.Tencent
             //凭证范围，格式为 Date/service/tc3_request，包含日期、所请求的服务和终止字符串（tc3_request）
             string credentialScope = date + "/" + service + "/" + "tc3_request";
             string hashedCanonicalRequest = SHA256Hex(canonicalRequest); //前述步骤拼接所得规范请求串的哈希值，
-            string stringToSign = 
+            string stringToSign =
                 algorithm + "\n"
                 + timestamp + "\n"
                 + credentialScope + "\n"
@@ -166,7 +166,7 @@ namespace MultiSupplierMTPlugin.Providers.Tencent
             string signature = BitConverter.ToString(signatureBytes).Replace("-", "").ToLower();
 
             //4. 拼接 Authorization
-            string authorization = 
+            string authorization =
                 algorithm + " "
                 + "Credential=" + secretId + "/" + credentialScope + ", "
                 + "SignedHeaders=" + signedHeaders + ", "

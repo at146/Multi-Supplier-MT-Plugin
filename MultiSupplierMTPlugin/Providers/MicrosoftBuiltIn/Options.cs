@@ -10,10 +10,10 @@ namespace MultiSupplierMTPlugin.Providers.MicrosoftBuiltIn
     }
 
     class GeneralSettings : NMTBaseGeneralSettings
-    {   
+    {
     }
 
     class SecureSettings : NMTBaseSecureSettings
-    {        
+    {
     }
 }

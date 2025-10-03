@@ -73,9 +73,9 @@ namespace MultiSupplierMTPlugin.Providers.DeepLX
 
             TransRequest transRequest = new TransRequest()
             {
-               Text = texts[0],
-               SourceLang = SupportLang.Dic[srcLangCode],
-               TargetLang = SupportLang.Dic[trgLangCode],
+                Text = texts[0],
+                SourceLang = SupportLang.Dic[srcLangCode],
+                TargetLang = SupportLang.Dic[trgLangCode],
             };
 
             var transResponse = await _httpClient.Post(url)

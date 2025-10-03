@@ -45,7 +45,7 @@ namespace MultiSupplierMTPlugin
         int NumberOfRetries { get; set; }
 
         string ApiKeyLink { get; set; }
-        
+
         string ApiDocLink { get; set; }
 
         ProviderOptions GetDefaultOptions();
@@ -53,14 +53,14 @@ namespace MultiSupplierMTPlugin
         ProviderOptions ShowConfig();
 
         Task Check(ProviderOptions tempOptions);
-        
+
         bool IsLanguagePairSupported(string srcLangCode, string trgLangCode);
 
         Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, CancellationToken cToken, ProviderOptions tempOptions = null);
     }
 
     abstract class MultiSupplierMTService<TGeneralSettings, TSecureSettings> : MultiSupplierMTService
-        where TGeneralSettings : ProviderGeneralSettings, new()  where TSecureSettings : ProviderSecureSettings, new() 
+        where TGeneralSettings : ProviderGeneralSettings, new() where TSecureSettings : ProviderSecureSettings, new()
     {
         protected MultiSupplierMTOptions _mtOptions;
 
@@ -80,10 +80,10 @@ namespace MultiSupplierMTPlugin
             this._mtGeneralSettings = mtOptions.GeneralSettings;
             this._mtSecureSettings = mtOptions.SecureSettings;
 
-            
+
             this._generalSettings = options?.GeneralSettings as TGeneralSettings ?? new TGeneralSettings();
             this._secureSettings = options?.SecureSettings as TSecureSettings ?? new TSecureSettings();
-            
+
             this._options = options ?? new ProviderOptions(this._generalSettings, this._secureSettings);
         }
 

@@ -24,7 +24,7 @@ namespace MultiSupplierMTPlugin.Providers.Caiyun
         {
             InitializeComponent();
 
-            this._service = service;                    
+            this._service = service;
             this._generalOptions = generalSettings;
             this._secureOptions = secureSettings;
 

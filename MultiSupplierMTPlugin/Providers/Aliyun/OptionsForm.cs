@@ -18,8 +18,8 @@ namespace MultiSupplierMTPlugin.Providers.Aliyun
         private MultiSupplierMTGeneralSettings _mtGeneralSettings;
 
         private MultiSupplierMTSecureSettings _mtSecureSettings;
-        
-        public OptionsForm(Service service, GeneralSettings generalSettings, SecureSettings secureSettings, 
+
+        public OptionsForm(Service service, GeneralSettings generalSettings, SecureSettings secureSettings,
             MultiSupplierMTGeneralSettings mtGeneralSettings, MultiSupplierMTSecureSettings mtSecureSettings)
         {
             InitializeComponent();
@@ -68,7 +68,7 @@ namespace MultiSupplierMTPlugin.Providers.Aliyun
             {
                 radioButtonProfessional.Checked = true;
             }
-            
+
             commonBottomControl.Init(this, _generalSettings.Checked, _service.ApiDocLink, linkLabelCheck_LinkClicked, Controls);
         }
 
@@ -99,9 +99,9 @@ namespace MultiSupplierMTPlugin.Providers.Aliyun
         {
             string serviceType = radioButtonGeneral.Checked ? "general" : "ecommerce";
 
-            await _service.Check( new Options(
-                    new GeneralSettings() { ServiceType = serviceType}, 
-                    new SecureSettings() { AccessKeyId = textBoxKeyId.Text, AccessKeySecret = textBoxKeySecret.Text}
+            await _service.Check(new Options(
+                    new GeneralSettings() { ServiceType = serviceType },
+                    new SecureSettings() { AccessKeyId = textBoxKeyId.Text, AccessKeySecret = textBoxKeySecret.Text }
                     ));
         }
 
