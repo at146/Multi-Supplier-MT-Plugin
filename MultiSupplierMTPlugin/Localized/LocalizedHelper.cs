@@ -42,12 +42,16 @@ namespace MultiSupplierMTPlugin.Localized
                 // 优先加载共用的主 dll
                 var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 var file = $"{_mainAssemblyName}.dll";
-                var mianAssemblyPath = Path.Combine(dir, file);                
+                var mianAssemblyPath = Path.Combine(dir, file);
                 assembly = Assembly.LoadFrom(mianAssemblyPath);
             }
             catch (FileNotFoundException)
             {
                 // 不存在再加载自身 dll
+                assembly = Assembly.GetExecutingAssembly();
+            }
+            catch (Exception)
+            {
                 assembly = Assembly.GetExecutingAssembly();
             }
 
@@ -162,9 +166,9 @@ namespace MultiSupplierMTPlugin.Localized
         {
             string newVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             string jsonOutputPath = $"localized_output_{newVersion}.json";
-            
+
             var (oldVersion, jsonInputPath) = FindClosestVersionOutput(newVersion);
-            
+
             string diagnosticsPath = $"localized_diagnostics_{oldVersion}_vs_{newVersion}.txt";
 
             string txtOutputPath = $"localized_output_{newVersion}.txt";
@@ -253,7 +257,7 @@ namespace MultiSupplierMTPlugin.Localized
                 JsonWriter.Write(JsonConvert.SerializeObject(localizedFile));
             }
 
-            
+
             using (StreamWriter diagWriter = new StreamWriter(diagnosticsPath, false))
             {
                 // Mismatched Property Type
@@ -362,7 +366,7 @@ namespace MultiSupplierMTPlugin.Localized
 
                 using (StreamWriter diagWriter = File.AppendText(diagnosticsPath))
                 {
-                    
+
                     //string oldVersion = oldData.Version ?? "Unknown";
                     //string newVersion = newData.Version ?? "Unknown";
 
@@ -431,7 +435,7 @@ namespace MultiSupplierMTPlugin.Localized
         }
 
         class LocalizedFile
-        { 
+        {
             public List<LocalizedClass> LocalizedClasses { get; set; }
 
             public string Version { get; set; }
@@ -445,13 +449,13 @@ namespace MultiSupplierMTPlugin.Localized
         }
 
         class LocalizedItem
-        {  
+        {
             public string GUID { get; set; }
 
             public string EN_US { get; set; }
 
             public string ZH_CN { get; set; }
-            
+
             public string PropertyName {  get; set; }
         }
         #endregion
