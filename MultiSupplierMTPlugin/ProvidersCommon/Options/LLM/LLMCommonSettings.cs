@@ -58,7 +58,7 @@ namespace MultiSupplierMTPlugin.ProvidersCommon.Options.LLM
         {
             var jss = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.All
+                TypeNameHandling = TypeNameHandling.Auto
             };
 
             var json = JsonConvert.SerializeObject(this, jss);
