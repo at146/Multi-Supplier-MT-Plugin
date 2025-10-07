@@ -1,4 +1,5 @@
-﻿using MemoQ.Addins.Common.Framework;
+﻿using System;
+using MemoQ.Addins.Common.Framework;
 using MemoQ.MTInterfaces;
 using MultiSupplierMTPlugin.Helpers;
 using MultiSupplierMTPlugin.Localized;
@@ -57,10 +58,10 @@ namespace MultiSupplierMTPlugin
             get { return true; }
         }
 
-        public override bool SupportFuzzyForwarding
-        {
-            get { return true; }
-        }
+        //public override bool SupportFuzzyForwarding
+        //{
+        //    get { return true; }
+        //}
 
         public override bool StoringTranslationSupported
         {
@@ -99,7 +100,8 @@ namespace MultiSupplierMTPlugin
             get
             {
                 // TODO 根据当前选的提供商，显示不同提供商的图标
-                return Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("MultiSupplierMTPlugin.Icon.png")); ;
+                Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name: "MultiSupplierMTPlugin.Icon.png");
+                return Image.FromStream(stream ?? throw new InvalidOperationException());
             }
         }
 

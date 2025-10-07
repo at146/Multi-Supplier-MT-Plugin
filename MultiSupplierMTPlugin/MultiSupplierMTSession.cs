@@ -12,7 +12,7 @@ using LLK = MultiSupplierMTPlugin.Localized.LocalizedKeyCommon;
 
 namespace MultiSupplierMTPlugin
 {
-    class MultiSupplierMTSession : ISessionWithMetadata, ISessionForStoringTranslations
+    class MultiSupplierMTSession : ISession, ISessionForStoringTranslations
     {
         private readonly MultiSupplierMTGeneralSettings _mtGeneralSettings;
         private readonly MultiSupplierMTSecureSettings _mtSecureSettings;
@@ -46,20 +46,10 @@ namespace MultiSupplierMTPlugin
 
         public TranslationResult TranslateCorrectSegment(Segment segm, Segment tmSource, Segment tmTarget)
         {
-            return TranslateCorrectSegment(segm, tmSource, tmTarget, null);
+            return TranslateCorrectSegment(new Segment[] { segm }, new Segment[] { tmSource }, new Segment[] { tmTarget })[0];
         }
 
-        public TranslationResult[] TranslateCorrectSegment(Segment[] segs, Segment[] tmSources, Segment[] tmTargets)
-        {
-            return TranslateCorrectSegment(segs, tmSources, tmTargets, null);
-        }
-
-        public TranslationResult TranslateCorrectSegment(Segment segm, Segment tmSource, Segment tmTarget, MTRequestMetadata metaData)
-        {
-            return TranslateCorrectSegment(new Segment[] { segm }, new Segment[] { tmSource }, new Segment[] { tmTarget }, metaData)[0];
-        }
-
-        public TranslationResult[] TranslateCorrectSegment(Segment[] srcSegms, Segment[] tmSrcSegms, Segment[] tmTgtSegms, MTRequestMetadata metaData)
+        public TranslationResult[] TranslateCorrectSegment(Segment[] srcSegms, Segment[] tmSrcSegms, Segment[] tmTgtSegms)
         {
             //memoQ 10.0 之前的版本不支持这两个参数
             var hasTm = tmSrcSegms != null && tmTgtSegms != null;
@@ -80,7 +70,7 @@ namespace MultiSupplierMTPlugin
             //翻译缓存中未存在的
             if (untransSrcTexts.Count > 0)
             {
-                ProcessUncachedTranslations(srcSegms, untransSrcTexts, untransTmSrcTexts, untransTmTgtTexts, metaData, untransOriginalIndices, results);
+                ProcessUncachedTranslations(srcSegms, untransSrcTexts, untransTmSrcTexts, untransTmTgtTexts, untransOriginalIndices, results);
             }
 
             return results;
@@ -124,7 +114,7 @@ namespace MultiSupplierMTPlugin
         // 主翻译逻辑
         private void ProcessUncachedTranslations(
             Segment[] srcSegms,
-            List<string> untransSrcTexts, List<string> untransTmSrcTexts, List<string> untransTmTgtTexts, MTRequestMetadata metaData,
+            List<string> untransSrcTexts, List<string> untransTmSrcTexts, List<string> untransTmTgtTexts,
             List<int> untransOriginalIndices, TranslationResult[] results)
         {
             var tasks = new List<Task>();
@@ -140,7 +130,7 @@ namespace MultiSupplierMTPlugin
                 {
                     try
                     {
-                        var batchTgtTexts = await TranslateCoreAsync(batchSrcTexts, batchTmSrcTexts, batchTmTgtTexts, metaData);
+                        var batchTgtTexts = await TranslateCoreAsync(batchSrcTexts, batchTmSrcTexts, batchTmTgtTexts);
 
                         for (int i = 0; i < batchSrcTexts.Count; i++)
                         {
@@ -232,7 +222,7 @@ namespace MultiSupplierMTPlugin
         }
 
         // 并发限制、速率限制、重试限制
-        private async Task<List<string>> TranslateCoreAsync(List<string> batchTexts, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData)
+        private async Task<List<string>> TranslateCoreAsync(List<string> batchTexts, List<string> tmSources, List<string> tmTargets)
         {
             // 重试限制放在外部缺点：请求还没真正发起，就可能会超时失败
             // 重试限制放在内部缺点：失败重试时，并发限制、速率限制不再起作用
@@ -254,7 +244,7 @@ namespace MultiSupplierMTPlugin
                     List<string> result;
                     try
                     {
-                        result = await _providerService.TranslateAsync(batchTexts, _srcLangCode, _trgLangCode, tmSources, tmTargets, metaData, cToken);
+                        result = await _providerService.TranslateAsync(batchTexts, _srcLangCode, _trgLangCode, tmSources, tmTargets, cToken);
                     }
                     catch (Exception ex)
                     {
@@ -316,11 +306,11 @@ namespace MultiSupplierMTPlugin
             switch (_requestType)
             {
                 case RequestType.OnlyFormattingWithXml:
-                    return SegmentXMLConverter.ConvertSegment2Xml(segment, false, true);
+                    return SegmentXMLConverter.ConvertSegment2Xml(segment, false);
                 case RequestType.OnlyFormattingWithHtml:
                     return SegmentHtmlConverter.ConvertSegment2Html(segment, false);
                 case RequestType.BothFormattingAndTagsWithXml:
-                    return SegmentXMLConverter.ConvertSegment2Xml(segment, true, true);
+                    return SegmentXMLConverter.ConvertSegment2Xml(segment, true);
                 case RequestType.BothFormattingAndTagsWithHtml:
                     return SegmentHtmlConverter.ConvertSegment2Html(segment, true);
                 default:
@@ -348,7 +338,8 @@ namespace MultiSupplierMTPlugin
             {
                 if (_mtGeneralSettings.NormalizeWhitespaceAroundTags)
                 {
-                    segment = TagWhitespaceNormalizer.NormalizeWhitespaceAroundTags(originalSegment, segment, this._srcLangCode, this._trgLangCode);
+                    // TODO: Cannot resolve TagWhitespaceNormalizer in memoq server 9.0.24
+                    //segment = TagWhitespaceNormalizer.NormalizeWhitespaceAroundTags(originalSegment, segment, this._srcLangCode, this._trgLangCode);
                 }
             }
             else

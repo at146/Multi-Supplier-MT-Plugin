@@ -88,7 +88,7 @@ namespace MultiSupplierMTPlugin.Providers.DeepLBuiltIn
             return new Options(_generalSettings, _secureSettings);
         }
 
-        public override async Task<List<string>> TranslateAsync(List<string> texts2, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, CancellationToken cToken, ProviderOptions tempOptions)
+        public override async Task<List<string>> TranslateAsync(List<string> texts2, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, CancellationToken cToken, ProviderOptions tempOptions)
         {
             string[] result = new string[texts2.Count];
 

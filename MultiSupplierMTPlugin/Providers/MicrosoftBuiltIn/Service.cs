@@ -79,7 +79,7 @@ namespace MultiSupplierMTPlugin.Providers.MicrosoftBuiltIn
             return new Options(_generalSettings, _secureSettings);
         }
 
-        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, CancellationToken cToken, ProviderOptions tempOptions)
+        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, CancellationToken cToken, ProviderOptions tempOptions)
         {
             var token = await _httpClient.Get(_tokenUrl)
                 .ReceiveString(cToken);

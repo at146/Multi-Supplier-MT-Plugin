@@ -70,7 +70,7 @@ namespace MultiSupplierMTPlugin.Providers.Aliyun
             return new Options(_generalSettings, _secureSettings);
         }
 
-        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, CancellationToken cToken, ProviderOptions tempOptions = null)
+        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, CancellationToken cToken, ProviderOptions tempOptions = null)
         {
             var (g, s) = ResolveOptions(tempOptions);
 

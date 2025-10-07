@@ -78,9 +78,9 @@ namespace MultiSupplierMTPlugin.Helpers
         }
 
 
-        public CurrentIndex GetCurrentIndex(string prjGuid, string docGuid, string srcLang, string tgtLang)
+        public CurrentIndex GetCurrentIndex(string docGuid, string srcLang, string tgtLang)
         {
-            string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            string key = GetKey(docGuid, srcLang, tgtLang);
 
             if (!_currentIndexDic.TryGetValue(key, out var currentIndex))
                 throw new Exception("Wait for the document to reload and reactivate the current segment, or document load fails, reopen the document.");
@@ -88,9 +88,9 @@ namespace MultiSupplierMTPlugin.Helpers
             return currentIndex;
         }
 
-        public void ResetCurrentIndex(string prjGuid, string docGuid, string srcLang, string tgtLang)
+        public void ResetCurrentIndex(string docGuid, string srcLang, string tgtLang)
         {
-            string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            string key = GetKey(docGuid, srcLang, tgtLang);
 
             if (!_currentIndexDic.ContainsKey(key))
                 throw new Exception("document load fails, reopen the document.");
@@ -103,12 +103,12 @@ namespace MultiSupplierMTPlugin.Helpers
             };
         }
 
-        public string GetTargetText(string prjGuid, string docGuid, string srcLang, string tgtLang,
+        public string GetTargetText(string docGuid, string srcLang, string tgtLang,
             int segmIndex)
         {
             CheckConnect();
 
-            string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            string key = GetKey(docGuid, srcLang, tgtLang);
 
             if (!_docDic.TryGetValue(key, out var doc) || !doc.TryGetValue(segmIndex, out Content content))
                 throw new Exception("document load fails, reopen the document.");
@@ -116,29 +116,29 @@ namespace MultiSupplierMTPlugin.Helpers
             return content.Target;
         }
 
-        public string GetAboveContext(string prjGuid, string docGuid, string srcLang, string tgtLang,
+        public string GetAboveContext(string docGuid, string srcLang, string tgtLang,
             int segmIndex, int maxSegm, int maxChar, bool includeSrc, bool includeTgt)
         {
             CheckConnect();
 
-            return GetContext(prjGuid, docGuid, srcLang, tgtLang,
+            return GetContext(docGuid, srcLang, tgtLang,
                 segmIndex, maxSegm, maxChar, includeSrc, includeTgt, true);
         }
 
-        public string GetBelowContext(string prjGuid, string docGuid, string srcLang, string tgtLang,
+        public string GetBelowContext(string docGuid, string srcLang, string tgtLang,
             int segmIndex, int maxSegm, int maxChar, bool includeSrc, bool includeTgt)
         {
             CheckConnect();
 
-            return GetContext(prjGuid, docGuid, srcLang, tgtLang,
+            return GetContext(docGuid, srcLang, tgtLang,
                 segmIndex, maxSegm, maxChar, includeSrc, includeTgt, false);
         }
 
-        public string GetDocName(string prjGuid, string docGuid, string srcLang, string tgtLang)
+        public string GetDocName(string docGuid, string srcLang, string tgtLang)
         {
             CheckConnect();
 
-            string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            string key = GetKey(docGuid, srcLang, tgtLang);
 
             if (!_docNameDic.TryGetValue(key, out var name))
                 throw new Exception("document load fails, reopen the document.");
@@ -146,11 +146,11 @@ namespace MultiSupplierMTPlugin.Helpers
             return name;
         }
 
-        public string GetFullText(string prjGuid, string docGuid, string srcLang, string tgtLang)
+        public string GetFullText(string docGuid, string srcLang, string tgtLang)
         {
             CheckConnect();
 
-            string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            string key = GetKey(docGuid, srcLang, tgtLang);
 
             if (!_docDic.TryGetValue(key, out var doc) || !_lastIndexDic.TryGetValue(key, out var lastIndex))
                 throw new Exception("document load fails, reopen the document.");
@@ -168,12 +168,12 @@ namespace MultiSupplierMTPlugin.Helpers
             return result.ToString();
         }
 
-        public void SetContext(string prjGuid, string docGuid, string srcLang, string tgtLang,
+        public void SetContext(string docGuid, string srcLang, string tgtLang,
            int segmIndex, string srcContent, string tgtContent)
         {
             CheckConnect();
 
-            string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            string key = GetKey(docGuid, srcLang, tgtLang);
 
             SetContext(key, segmIndex, srcContent, tgtContent);
         }
@@ -186,10 +186,10 @@ namespace MultiSupplierMTPlugin.Helpers
             _docNameDic[key] = previewPart.SourceDocument.DocumentName;
         }
 
-        private string GetContext(string prjGuid, string docGuid, string srcLang, string tgtLang,
+        private string GetContext(string docGuid, string srcLang, string tgtLang,
            int segmIndex, int maxSegm, int maxChar, bool includeSrc, bool includeTgt, bool isAbove)
         {
-            string key = GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            string key = GetKey(docGuid, srcLang, tgtLang);
 
             if (!_docDic.TryGetValue(key, out var doc) || !_lastIndexDic.TryGetValue(key, out var lastIndex))
                 throw new Exception("document load fails, reopen the document.");
@@ -274,15 +274,14 @@ namespace MultiSupplierMTPlugin.Helpers
 
         private string GetKey(PreviewPart previewPart)
         {
-            string prjGuid = string.Empty;
             string docGuid = previewPart.SourceDocument.DocumentGuid.ToString();
             string srcLang = previewPart.SourceLangCode;
             string tgtLang = previewPart.TargetLangCode;
 
-            return GetKey(prjGuid, docGuid, srcLang, tgtLang);
+            return GetKey(docGuid, srcLang, tgtLang);
         }
 
-        private string GetKey(string projectGuid, string docGuid, string srcLang, string tgtLang)
+        private string GetKey(string docGuid, string srcLang, string tgtLang)
         {
             // 暂时不使用 project guid，因为只有 MT SDK 中能获取到，Preview SDK 中获取不到。
             return $"{docGuid}|{srcLang}|{tgtLang}";

@@ -9,7 +9,7 @@ namespace MemoQ.PreviewInterfaces.ProtcolWrappers.NamedPipe.Communication.Comman
         /// The focused range on the source side.
         /// </summary>
         public FocusedRange SourceFocusedRange;
-
+        
         /// <summary>
         /// The focused range on the target side.
         /// </summary>

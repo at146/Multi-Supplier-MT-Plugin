@@ -64,7 +64,7 @@ namespace MultiSupplierMTPlugin.Providers.DeepLX
             return new Options(_generalSettings, _secureSettings);
         }
 
-        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, CancellationToken cToken, ProviderOptions tempOptions)
+        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, CancellationToken cToken, ProviderOptions tempOptions)
         {
             var (g, s) = ResolveOptions(tempOptions);
 

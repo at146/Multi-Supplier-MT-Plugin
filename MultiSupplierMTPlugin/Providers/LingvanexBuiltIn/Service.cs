@@ -83,7 +83,7 @@ namespace MultiSupplierMTPlugin.Providers.LingvanexBuiltIn
             return new Options(_generalSettings, _secureSettings);
         }
 
-        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData, CancellationToken cToken, ProviderOptions tempOptions)
+        public override async Task<List<string>> TranslateAsync(List<string> texts, string srcLangCode, string trgLangCode, List<string> tmSources, List<string> tmTargets, CancellationToken cToken, ProviderOptions tempOptions)
         {
             string[] result = new string[texts.Count];
 
@@ -101,14 +101,17 @@ namespace MultiSupplierMTPlugin.Providers.LingvanexBuiltIn
 
             var transResponse = JObject.Parse(jsonResponse);
 
-            if (transResponse.ContainsKey("result"))
-            {
-                result[0] = transResponse["result"].ToString();
-            }
-            else
-            {
-                throw new Exception($"Unexpected response format: {jsonResponse}");
-            }
+            result[0] = transResponse["result"].ToString();
+
+            // TODO: fix for Newtonsoft.Json 10.0
+            //if (transResponse.ContainsKey("result"))
+            //{
+            //    result[0] = transResponse["result"].ToString();
+            //}
+            //else
+            //{
+            //    throw new Exception($"Unexpected response format: {jsonResponse}");
+            //}
 
             return result.ToList();
         }

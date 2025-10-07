@@ -43,9 +43,9 @@ namespace MultiSupplierMTPlugin.Helpers
             return summary;
         }
 
-        public static bool TryReadFromFile(string projectGuid, string documentGuid, string srcLang, string tgtLang, out string summary)
+        public static bool TryReadFromFile(string documentGuid, string srcLang, string tgtLang, out string summary)
         {
-            string filePath = GetCacheFilePath(projectGuid, documentGuid, srcLang, tgtLang);
+            string filePath = GetCacheFilePath(documentGuid, srcLang, tgtLang);
             try
             {
                 summary = ReadFromFile(filePath);
@@ -58,18 +58,18 @@ namespace MultiSupplierMTPlugin.Helpers
             }
         }
 
-        public static string ReadFromCacheOrGenerate(string projectGuid, string documentGuid, string srcLang, string tgtLang,
+        public static string ReadFromCacheOrGenerate(string documentGuid, string srcLang, string tgtLang,
             MultiSupplierMTOptions mtOptions, ProviderOptions providerCloneOptions, MultiSupplierMTService service,
-            List<string> texts, List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData)
+            List<string> texts, List<string> tmSources, List<string> tmTargets)
         {
-            if (TryReadFromFile(projectGuid, documentGuid, srcLang, tgtLang, out var summaryInCache))
+            if (TryReadFromFile(documentGuid, srcLang, tgtLang, out var summaryInCache))
             {
                 return summaryInCache;
             }
 
             lock (_lockObj)
             {
-                if (TryReadFromFile(projectGuid, documentGuid, srcLang, tgtLang, out var summaryInCache2))
+                if (TryReadFromFile(documentGuid, srcLang, tgtLang, out var summaryInCache2))
                 {
                     return summaryInCache2;
                 }
@@ -88,10 +88,10 @@ namespace MultiSupplierMTPlugin.Helpers
 
                 string summary = Task.Run(async () =>
                 {
-                    return await service.TranslateAsync(texts, srcLang, tgtLang, tmSources, tmTargets, metaData, new CancellationToken(), providerCloneOptions);
+                    return await service.TranslateAsync(texts, srcLang, tgtLang, tmSources, tmTargets, new CancellationToken(), providerCloneOptions);
                 }).GetAwaiter().GetResult()[0];
 
-                string filePath = GetCacheFilePath(projectGuid, documentGuid, srcLang, tgtLang);
+                string filePath = GetCacheFilePath(documentGuid, srcLang, tgtLang);
 
                 string dir = Path.GetDirectoryName(filePath);
                 if (!Directory.Exists(dir))
@@ -125,10 +125,10 @@ namespace MultiSupplierMTPlugin.Helpers
             return $"{filePath}|{modificationTime}";
         }
 
-        private static string GetCacheFilePath(string projectGuid, string documentGuid, string srcLang, string tgtLang)
+        private static string GetCacheFilePath(string documentGuid, string srcLang, string tgtLang)
         {
             string cacheDir = Path.Combine(OptionsHelper.MtOption.GeneralSettings.DataDir, "Cache", "Summary");
-            string docName = ContextHelper.Instance.GetDocName(projectGuid, documentGuid, srcLang, tgtLang);
+            string docName = ContextHelper.Instance.GetDocName(documentGuid, srcLang, tgtLang);
             string fileName = $"[summary]-[{docName}]-[{documentGuid}].txt"; // 暂时用不到 projectGuid, srcLang, tgtLang
 
             return Path.Combine(cacheDir, fileName);

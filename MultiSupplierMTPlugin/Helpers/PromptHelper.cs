@@ -114,8 +114,7 @@ namespace MultiSupplierMTPlugin.Helpers
 
             List<string> texts,
             string srcLang, string tgtLang,
-            List<string> tmSources, List<string> tmTargets,
-            MTRequestMetadata metaData
+            List<string> tmSources, List<string> tmTargets
             )
         {
             // 解决 xml 反序列化后换行符总是变成 \n
@@ -191,15 +190,16 @@ namespace MultiSupplierMTPlugin.Helpers
                 promptBuilder.HasPlaceholder(_TARGET_TEXT_KEY))
             {
                 // 全文、摘要、上下文、目标文本需要 memoQ 版本大于 9.14 才能获取到 metaData
-                if (metaData == null) throw new Exception($"{_FULL_TEXT_KEY}, {_SUAMMARY_TEXT_KEY}, {_ABOVE_TEXT_KEY}, {_BELOW_TEXT_KEY}, {_TARGET_TEXT_KEY} Placeholders require memoQ min version 9.14");
+                //if (metaData == null) throw new Exception($"{_FULL_TEXT_KEY}, {_SUAMMARY_TEXT_KEY}, {_ABOVE_TEXT_KEY}, {_BELOW_TEXT_KEY}, {_TARGET_TEXT_KEY} Placeholders require memoQ min version 9.14");
 
-                var prjGuid = metaData.ProjectGuid.ToString();
-                var docGuid = metaData.DocumentID.ToString();
+                //var prjGuid = metaData.ProjectGuid.ToString();
+                //var docGuid = metaData.DocumentID.ToString();
+                var docGuid = Guid.NewGuid().ToString();
 
                 // 全文文本
                 if (promptBuilder.HasPlaceholder(_FULL_TEXT_KEY))
                 {
-                    string fullText = ContextHelper.Instance.GetFullText(prjGuid, docGuid, srcLang, tgtLang);
+                    string fullText = ContextHelper.Instance.GetFullText(docGuid, srcLang, tgtLang);
                     promptBuilder.SetPlaceholder(_FULL_TEXT_KEY, fullText);
                 }
 
@@ -210,8 +210,8 @@ namespace MultiSupplierMTPlugin.Helpers
 
                     if (cSettings.SummaryAutoGenerate)
                     {
-                        summary = SummaryHelper.ReadFromCacheOrGenerate(prjGuid, docGuid, srcLang, tgtLang,
-                                mtOptions, providerOptions, service, texts, tmSources, tmTargets, metaData);
+                        summary = SummaryHelper.ReadFromCacheOrGenerate(docGuid, srcLang, tgtLang,
+                                mtOptions, providerOptions, service, texts, tmSources, tmTargets);
                     }
                     else
                     {
@@ -226,7 +226,7 @@ namespace MultiSupplierMTPlugin.Helpers
                 {
                     if (texts.Count > 1) throw new Exception("Batch translation or Pre-translation does not support getting above-text, below-text or target-text");
 
-                    var currentIndex = GetSegmIndex(prjGuid, docGuid, srcLang, tgtLang);
+                    var currentIndex = GetSegmIndex(docGuid, srcLang, tgtLang);
                     //LoggingHelper.Log($"Prompt segmIndex: {currentIndex.IndexStart}, {currentIndex.IndexEnd}");
 
                     if (promptBuilder.HasPlaceholder(_ABOVE_TEXT_KEY))
@@ -236,7 +236,7 @@ namespace MultiSupplierMTPlugin.Helpers
                         var aboveIncludeSrc = cSettings.AboveTextIncludeSource;
                         var aboveIncludeTgt = cSettings.AboveTextIncludeTarget;
 
-                        string aboveText = ContextHelper.Instance.GetAboveContext(prjGuid, docGuid, srcLang, tgtLang,
+                        string aboveText = ContextHelper.Instance.GetAboveContext(docGuid, srcLang, tgtLang,
                             currentIndex.IndexStart, aboveMaxSegm, aboveMaxChar, aboveIncludeSrc, aboveIncludeTgt);
 
                         promptBuilder.SetPlaceholder(_ABOVE_TEXT_KEY, aboveText);
@@ -249,7 +249,7 @@ namespace MultiSupplierMTPlugin.Helpers
                         var belowIncludeSrc = cSettings.BelowTextIncludeSource;
                         var belowIncludeTgt = cSettings.BelowTextIncludeTarget;
 
-                        string belowText = ContextHelper.Instance.GetBelowContext(prjGuid, docGuid, srcLang, tgtLang,
+                        string belowText = ContextHelper.Instance.GetBelowContext(docGuid, srcLang, tgtLang,
                             currentIndex.IndexEnd, belowMaxSegm, belowMaxChar, belowIncludeSrc, belowIncludeTgt);
 
                         promptBuilder.SetPlaceholder(_BELOW_TEXT_KEY, belowText);
@@ -261,7 +261,7 @@ namespace MultiSupplierMTPlugin.Helpers
                         string targetText = "";
                         for (int i = currentIndex.IndexStart; i <= currentIndex.IndexEnd; i++)
                         {
-                            targetText += ContextHelper.Instance.GetTargetText(prjGuid, docGuid, srcLang, tgtLang, i);
+                            targetText += ContextHelper.Instance.GetTargetText(docGuid, srcLang, tgtLang, i);
                         }
 
                         promptBuilder.SetPlaceholder(_TARGET_TEXT_KEY, targetText);
@@ -273,17 +273,17 @@ namespace MultiSupplierMTPlugin.Helpers
         }
 
 
-        private static CurrentIndex GetSegmIndex(string prjGuid, string docGuid, string srcLang, string tgtLang)
+        private static CurrentIndex GetSegmIndex(string docGuid, string srcLang, string tgtLang)
         {
             var startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             while (true)
             {
-                var currentIndex = ContextHelper.Instance.GetCurrentIndex(prjGuid, docGuid, srcLang, tgtLang);
+                var currentIndex = ContextHelper.Instance.GetCurrentIndex(docGuid, srcLang, tgtLang);
 
                 var diff = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - currentIndex.UtcMs;
                 if (currentIndex.IndexStart != -1 && currentIndex.IndexEnd != -1 && diff < 1000)
                 {
-                    ContextHelper.Instance.ResetCurrentIndex(prjGuid, docGuid, srcLang, tgtLang);
+                    ContextHelper.Instance.ResetCurrentIndex(docGuid, srcLang, tgtLang);
                     return currentIndex;
                 }
 

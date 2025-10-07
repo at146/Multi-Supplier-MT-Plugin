@@ -39,6 +39,15 @@ namespace MultiSupplierMTPlugin
 
         #region IEngine Members
 
+        /// <summary>
+        /// Tells if the engine supports the adjustment of fuzzy TM hits through machine translation (MatchPatch).
+        /// This means that if there is a TM match for the source segment, but it is not perfect,
+        /// memoQ will try to improve the suggestion by sending the difference to an MT provider for translation.
+        /// If your MT service can only translate complete segments reliably, but not partial ones (e.g., two separate words),
+        /// disable this feature. But if the service is good at translating segment parts, enable it. If the feature
+        /// is disabled, your plugin will not appear in the MatchPatch list on the Edit machine translation
+        /// settings dialog's Settings tab
+        /// </summary>
         public override bool SupportsFuzzyCorrection
         {
             get { return true; }

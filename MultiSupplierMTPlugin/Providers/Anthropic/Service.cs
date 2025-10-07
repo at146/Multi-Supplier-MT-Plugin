@@ -111,7 +111,7 @@ namespace MultiSupplierMTPlugin.Providers.Anthropic
             GeneralSettings g, SecureSettings s,
             string systemPrompt, string userPrompt,
             List<string> texts, string srcLang, string tgtLang,
-            List<string> tmSources, List<string> tmTargets, MTRequestMetadata metaData,
+            List<string> tmSources, List<string> tmTargets,
             CancellationToken cToken)
         {
             var localizedName = ServiceLocalizedNameHelper.Get(UniqueName);
