@@ -118,7 +118,13 @@ namespace MultiSupplierMTPlugin
 
                 try
                 {
-                    await TranslateAsync(new List<string> { "test" }, "eng", "zho-CN", null, null, cts.Token, tempOptions);
+                    List<string> texts = new List<string> { "test" };
+                    string srcLangCode = "eng";
+                    string trgLangCode = "rus";
+                    List<string> tmSources = null;
+                    List<string> tmTarget = null;
+                    LoggingHelper.LogForсe($"MultiSupplierMTService|Check| texts - {string.Join(", ", texts)}, srcLangCode - {srcLangCode}, trgLangCode - {trgLangCode}, tmSources - {tmSources}, tmTarget - {tmTarget}");
+                    await TranslateAsync(texts, srcLangCode, trgLangCode, tmSources, tmTarget, cts.Token, tempOptions);
                 }
                 catch (OperationCanceledException ex) when (cts.IsCancellationRequested)
                 {
@@ -136,6 +142,7 @@ namespace MultiSupplierMTPlugin
 
         public virtual bool IsLanguagePairSupported(string srcLangCode, string trgLangCode)
         {
+            LoggingHelper.LogForсe($"MultiSupplierMTService|IsLanguagePairSupported srcLangCode - {srcLangCode}, trgLangCode - {trgLangCode}");
             return SupportLangDic.ContainsKey(srcLangCode) && SupportLangDic.ContainsKey(trgLangCode);
         }
 
@@ -239,52 +246,63 @@ namespace MultiSupplierMTPlugin
             List<string> tmSources, List<string> tmTargets,
             CancellationToken cToken, ProviderOptions tempOptions = null)
         {
-            // 1.决定使用哪套配置
-            var (g, s) = ResolveOptions(tempOptions);
-
-            // 2.服务本地化名字，用在日志记录时
-            var localizedName = ServiceLocalizedNameHelper.Get(UniqueName);
-
-            // 3.决定使用哪套提示词：是否使用模板、是否批量翻译
-            string systemPrompt, userPrompt;
-            if (string.IsNullOrEmpty(g.PromptTemplateId))
+            try
             {
-                systemPrompt = g.EnableBathTranslate ? g.BathTranslateSystemPrompt : g.SystemPrompt;
-                userPrompt = g.EnableBathTranslate ? g.BathTranslateUserPrompt : g.UserPrompt;
+                LoggingHelper.LogForсe("MultiSupplierMTService|TranslateAsync");
+                // 1.决定使用哪套配置
+                var (g, s) = ResolveOptions(tempOptions);
+
+                // 2.服务本地化名字，用在日志记录时
+                var localizedName = ServiceLocalizedNameHelper.Get(UniqueName);
+
+                LoggingHelper.LogForсe($"MultiSupplierMTService|TranslateAsync|  localizedName - {localizedName}");
+
+                // 3.决定使用哪套提示词：是否使用模板、是否批量翻译
+                string systemPrompt, userPrompt;
+                if (string.IsNullOrEmpty(g.PromptTemplateId))
+                {
+                    systemPrompt = g.EnableBathTranslate ? g.BathTranslateSystemPrompt : g.SystemPrompt;
+                    userPrompt = g.EnableBathTranslate ? g.BathTranslateUserPrompt : g.UserPrompt;
+                }
+                else
+                {
+                    var template = g.PromptTemplateId == "Default"
+                        ? PromptTemplate.GetDefault()
+                        : _mtGeneralSettings.LLMCommon.PromptTemplates.FirstOrDefault(p => p.ID == g.PromptTemplateId);
+
+                    if (template == null)
+                        throw new Exception("Using a deleted prompt template. Please reconfigure.");
+
+                    systemPrompt = g.EnableBathTranslate ? template.BathTranslateSystemPrompt : template.SystemPrompt;
+                    userPrompt = g.EnableBathTranslate ? template.BathTranslateUserPrompt : template.UserPrompt;
+                }
+
+                // 4.解析提示词占位符 (TODO 摘要生成自定义一个方法，而不是共用翻译方法，否则参数太长了)
+                (systemPrompt, userPrompt) = PromptHelper.Parse(
+                    systemPrompt, userPrompt,
+                    _mtOptions, _options, SupportLangDic, this,
+                    texts, srcLang, tgtLang, tmSources, tmTargets
+                    );
+
+                // 5.日志记录最终解析后的提示词
+                LoggingHelper.LogForсe($"{localizedName} Request\r\n[System Prompt: ]\r\n{systemPrompt}\r\n[User Prompt: ]\r\n{userPrompt}");
+
+                // 子类实现
+                var content = await TranslateAsync(g, s, systemPrompt, userPrompt, texts, srcLang, tgtLang, tmSources, tmTargets, cToken);
+
+                // 14.是否批量翻译，以及批量翻译时的结果解析
+                var result = g.EnableBathTranslate
+                    ? BathTranslateHelper.Deserialize(g.BathTranslateSchema, texts.Count, content)
+                    : new List<string> { content };
+
+                // 15.返回最终结果
+                return result;
             }
-            else
+            catch (Exception e)
             {
-                var template = g.PromptTemplateId == "Default"
-                    ? PromptTemplate.GetDefault()
-                    : _mtGeneralSettings.LLMCommon.PromptTemplates.FirstOrDefault(p => p.ID == g.PromptTemplateId);
-
-                if (template == null)
-                    throw new Exception("Using a deleted prompt template. Please reconfigure.");
-
-                systemPrompt = g.EnableBathTranslate ? template.BathTranslateSystemPrompt : template.SystemPrompt;
-                userPrompt = g.EnableBathTranslate ? template.BathTranslateUserPrompt : template.UserPrompt;
+                LoggingHelper.LogForсe($"MultiSupplierMTService|TranslateAsync| e.Message - {e.Message}, e.StackTrace - {e.StackTrace}");
+                throw;
             }
-
-            // 4.解析提示词占位符 (TODO 摘要生成自定义一个方法，而不是共用翻译方法，否则参数太长了)
-            (systemPrompt, userPrompt) = PromptHelper.Parse(
-                systemPrompt, userPrompt,
-                _mtOptions, _options, SupportLangDic, this,
-                texts, srcLang, tgtLang, tmSources, tmTargets
-                );
-
-            // 5.日志记录最终解析后的提示词
-            LoggingHelper.Info($"{localizedName} Request\r\n[System Prompt: ]\r\n{systemPrompt}\r\n[User Prompt: ]\r\n{userPrompt}");
-
-            // 子类实现
-            var content = await TranslateAsync(g, s, systemPrompt, userPrompt, texts, srcLang, tgtLang, tmSources, tmTargets, cToken);
-
-            // 14.是否批量翻译，以及批量翻译时的结果解析
-            var result = g.EnableBathTranslate
-                ? BathTranslateHelper.Deserialize(g.BathTranslateSchema, texts.Count, content)
-                : new List<string> { content };
-
-            // 15.返回最终结果
-            return result;
         }
     }
 }

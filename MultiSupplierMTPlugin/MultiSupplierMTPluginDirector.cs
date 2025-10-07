@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using MemoQ.Addins.Common.Framework;
 using MemoQ.MTInterfaces;
 using MultiSupplierMTPlugin.Helpers;
@@ -112,6 +113,15 @@ namespace MultiSupplierMTPlugin
 
         public override PluginSettings EditOptions(IWin32Window parentForm, PluginSettings settings)
         {
+            try
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTPluginDirector|EditOptions| settings - {settings.GeneralSettings}, args.PluginSettings.SecureSettings - {settings.SecureSettings}");
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             var mtOptions = GetOrInitializeOptions(settings);
 
             using (var form = new MultiSupplierMTOptionsForm(mtOptions))
@@ -132,56 +142,82 @@ namespace MultiSupplierMTPlugin
 
         public override bool IsLanguagePairSupported(LanguagePairSupportedParams args)
         {
-            var mtOptions = GetOrInitializeOptions(args.PluginSettings);
+            try
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTPluginDirector|IsLanguagePairSupported| args.SourceLangCode - {args.SourceLangCode}, args.TargetLangCode - {args.TargetLangCode}");
+                LoggingHelper.LogForсe($"MultiSupplierMTPluginDirector|IsLanguagePairSupported| args.PluginSettings.GeneralSettings - {args.PluginSettings.GeneralSettings}, args.PluginSettings.SecureSettings - {args.PluginSettings.SecureSettings}");
+                
+                var mtOptions = GetOrInitializeOptions(args.PluginSettings);
 
-            var provider = mtOptions.GeneralSettings.CurrentServiceProvider;
-            var service = ServiceHelper.GetServiceOrFallback(provider);
+                var provider = mtOptions.GeneralSettings.CurrentServiceProvider;
+                var service = ServiceHelper.GetServiceOrFallback(provider);
 
-            return service.IsLanguagePairSupported(args.SourceLangCode, args.TargetLangCode);
+                var isLanguagePairSupported = service.IsLanguagePairSupported(args.SourceLangCode, args.TargetLangCode);
+
+                LoggingHelper.LogForсe($"MultiSupplierMTPluginDirector|IsLanguagePairSupported| isLanguagePairSupported - {isLanguagePairSupported}");
+
+                return isLanguagePairSupported;
+            }
+            catch (Exception e)
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTSession|IsLanguagePairSupported| e.Message - {e.Message}, e.StackTrace - {e.StackTrace}");
+                throw;
+            }
         }
 
         public override IEngine2 CreateEngine(CreateEngineParams args)
         {
-            var mtOptions = GetOrInitializeOptions(args.PluginSettings);
-
-            var provider = mtOptions.GeneralSettings.CurrentServiceProvider;
-            var service = ServiceHelper.GetServiceOrFallback(provider);
-
-            LimitHelper limitHelper;
-            RetryHelper retryHelper;
-            if (mtOptions.GeneralSettings.EnableCustomRequestLimit)
+            try
             {
-                limitHelper = new LimitHelper(
-                    mtOptions.GeneralSettings.MaxRequestsHold,
-                    mtOptions.GeneralSettings.MaxRequestsPerWindow,
-                    mtOptions.GeneralSettings.WindowSizeMs,
-                    mtOptions.GeneralSettings.RequestSmoothness
-                    );
+                LoggingHelper.LogForсe($"MultiSupplierMTPluginDirector|CreateEngine| args.SourceLangCode - {args.SourceLangCode}, args.TargetLangCode - {args.TargetLangCode}");
+                LoggingHelper.LogForсe($"MultiSupplierMTPluginDirector|CreateEngine| args.PluginSettings.GeneralSettings - {args.PluginSettings.GeneralSettings}, args.PluginSettings.SecureSettings - {args.PluginSettings.SecureSettings}");
 
-                retryHelper = new RetryHelper(
-                    mtOptions.GeneralSettings.FailedTimeoutMs,
-                    mtOptions.GeneralSettings.RetryWaitingMs,
-                    mtOptions.GeneralSettings.NumberOfRetries
+                var mtOptions = GetOrInitializeOptions(args.PluginSettings);
+
+                var provider = mtOptions.GeneralSettings.CurrentServiceProvider;
+                var service = ServiceHelper.GetServiceOrFallback(provider);
+
+                LimitHelper limitHelper;
+                RetryHelper retryHelper;
+                if (mtOptions.GeneralSettings.EnableCustomRequestLimit)
+                {
+                    limitHelper = new LimitHelper(
+                        mtOptions.GeneralSettings.MaxRequestsHold,
+                        mtOptions.GeneralSettings.MaxRequestsPerWindow,
+                        mtOptions.GeneralSettings.WindowSizeMs,
+                        mtOptions.GeneralSettings.RequestSmoothness
+                        );
+
+                    retryHelper = new RetryHelper(
+                        mtOptions.GeneralSettings.FailedTimeoutMs,
+                        mtOptions.GeneralSettings.RetryWaitingMs,
+                        mtOptions.GeneralSettings.NumberOfRetries
+                        );
+                }
+                else
+                {
+                    limitHelper = new LimitHelper(
+                        service.MaxThreadHold,
+                        service.MaxQueriesPerWindow,
+                        service.WindowSizeMs,
+                        service.Smoothness
+                        );
+
+                    retryHelper = new RetryHelper(
+                       service.FailedTimeoutMs,
+                       service.RetryWaitingMs,
+                       service.NumberOfRetries
                     );
+                }
+
+                // TODO：多个 MultiSupplierMTEngine 应该共用一个 RateLimitHelper，否则一对多翻译时限流失效。
+                return new MultiSupplierMTEngine(mtOptions, limitHelper, retryHelper, service, mtOptions.GeneralSettings.RequestType, args.SourceLangCode, args.TargetLangCode);
             }
-            else
+            catch (Exception e)
             {
-                limitHelper = new LimitHelper(
-                    service.MaxThreadHold,
-                    service.MaxQueriesPerWindow,
-                    service.WindowSizeMs,
-                    service.Smoothness
-                    );
-
-                retryHelper = new RetryHelper(
-                   service.FailedTimeoutMs,
-                   service.RetryWaitingMs,
-                   service.NumberOfRetries
-                );
+                LoggingHelper.LogForсe($"MultiSupplierMTSession|CreateEngine| e.Message - {e.Message}, e.StackTrace - {e.StackTrace}");
+                throw;
             }
-
-            // TODO：多个 MultiSupplierMTEngine 应该共用一个 RateLimitHelper，否则一对多翻译时限流失效。
-            return new MultiSupplierMTEngine(mtOptions, limitHelper, retryHelper, service, mtOptions.GeneralSettings.RequestType, args.SourceLangCode, args.TargetLangCode);
         }
 
         #endregion
@@ -218,7 +254,50 @@ namespace MultiSupplierMTPlugin
 
                 _mtOptions = mtOptions;
 
+                LogFields(general);
+
                 return mtOptions;
+            }
+        }
+
+        static void LogFields(object obj)
+        {
+            Type type = obj.GetType();
+
+            FieldInfo[] fields = type.GetFields(
+                BindingFlags.Public |
+                BindingFlags.NonPublic |
+                BindingFlags.Instance |
+                BindingFlags.Static |
+                BindingFlags.DeclaredOnly);
+
+            foreach (FieldInfo field in fields)
+            {
+                object value = field.GetValue(obj);
+
+                // Если это словарь
+                if (value is IDictionary dict)
+                {
+                    LoggingHelper.LogForсe($"{field.FieldType.Name} {field.Name}:");
+
+                    foreach (var key in dict.Keys)
+                    {
+                        LoggingHelper.LogForсe($"   {key} = {dict[key]}");
+                    }
+                }
+                // Если это массив или список
+                else if (value is IEnumerable enumerable && !(value is string))
+                {
+                    LoggingHelper.LogForсe($"{field.FieldType.Name} {field.Name}:");
+                    foreach (var item in enumerable)
+                    {
+                        LoggingHelper.LogForсe($"   {item}");
+                    }
+                }
+                else
+                {
+                    LoggingHelper.LogForсe($"{field.FieldType.Name} {field.Name} = {value}");
+                }
             }
         }
     }

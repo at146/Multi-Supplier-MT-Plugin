@@ -68,12 +68,30 @@ namespace MultiSupplierMTPlugin
 
         public override ISession CreateLookupSession()
         {
-            return new MultiSupplierMTSession(_mtOptions, _limitHelper, _retryHelper, _providerService, _requestType, _srcLangCode, _trgLangCode);
+            try
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTEngine|CreateLookupSession| _srcLangCode - {_srcLangCode}, _trgLangCode - {_trgLangCode}");
+                return new MultiSupplierMTSession(_mtOptions, _limitHelper, _retryHelper, _providerService, _requestType, _srcLangCode, _trgLangCode);
+            }
+            catch (Exception e)
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTSession|CreateLookupSession| e.Message - {e.Message}, e.StackTrace - {e.StackTrace}");
+                throw;
+            }
         }
 
         public override ISessionForStoringTranslations CreateStoreTranslationSession()
         {
-            return new MultiSupplierMTSession(_mtOptions, _limitHelper, _retryHelper, _providerService, _requestType, _srcLangCode, _trgLangCode);
+            try
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTEngine|CreateStoreTranslationSession| _srcLangCode - {_srcLangCode}, _trgLangCode - {_trgLangCode}");
+                return new MultiSupplierMTSession(_mtOptions, _limitHelper, _retryHelper, _providerService, _requestType, _srcLangCode, _trgLangCode);
+            }
+            catch (Exception e)
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTSession|CreateStoreTranslationSession| e.Message - {e.Message}, e.StackTrace - {e.StackTrace}");
+                throw;
+            }
         }
 
         #endregion

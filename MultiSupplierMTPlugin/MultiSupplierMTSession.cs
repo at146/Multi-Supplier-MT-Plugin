@@ -46,34 +46,59 @@ namespace MultiSupplierMTPlugin
 
         public TranslationResult TranslateCorrectSegment(Segment segm, Segment tmSource, Segment tmTarget)
         {
-            return TranslateCorrectSegment(new Segment[] { segm }, new Segment[] { tmSource }, new Segment[] { tmTarget })[0];
+            try
+            {
+                LoggingHelper.LogForсe($"MultiSupplierMTSession|TranslateCorrectSegment| segm.PlainText - {segm.PlainText}");
+                return TranslateCorrectSegment(new Segment[] { segm }, new Segment[] { tmSource }, new Segment[] { tmTarget })[0];
+            }
+            catch (Exception e)
+            {
+                TranslationResult translationResult = new TranslationResult()
+                {
+                    Exception = new MTException(e.Message, e.StackTrace, e.InnerException)
+                };
+                return translationResult;
+            }
         }
 
         public TranslationResult[] TranslateCorrectSegment(Segment[] srcSegms, Segment[] tmSrcSegms, Segment[] tmTgtSegms)
         {
-            //memoQ 10.0 之前的版本不支持这两个参数
-            var hasTm = tmSrcSegms != null && tmTgtSegms != null;
-
-            //记录未翻译文本在原始列表中的位置，翻译后才能将结果放入原始位置
-            var untransOriginalIndices = new List<int>();
-
-            var untransSrcTexts = new List<string>();                  //未翻译的句段纯文本列表
-            var untransTmSrcTexts = hasTm ? new List<string>() : null; //未翻译句段关联的翻译记忆原文纯文本列表
-            var untransTmTgtTexts = hasTm ? new List<string>() : null; //未翻译句段关联的翻译记忆译文纯文本列表
-
-            //最终翻译结果列表
-            TranslationResult[] results = new TranslationResult[srcSegms.Length];
-
-            //将句段分成两部分（同时转换成纯文本）：缓存中存在的转换到结果列表，缓存中未存在的转换到未翻译列表
-            DivideCachedAndUncached(srcSegms, tmSrcSegms, tmTgtSegms, untransSrcTexts, untransTmSrcTexts, untransTmTgtTexts, untransOriginalIndices, results);
-
-            //翻译缓存中未存在的
-            if (untransSrcTexts.Count > 0)
+            try
             {
-                ProcessUncachedTranslations(srcSegms, untransSrcTexts, untransTmSrcTexts, untransTmTgtTexts, untransOriginalIndices, results);
-            }
+                LoggingHelper.LogForсe($"MultiSupplierMTSession|TranslateCorrectSegment[]| segm.PlainText - {srcSegms[0].PlainText}");
+                //memoQ 10.0 之前的版本不支持这两个参数
+                var hasTm = tmSrcSegms != null && tmTgtSegms != null;
 
-            return results;
+                //记录未翻译文本在原始列表中的位置，翻译后才能将结果放入原始位置
+                var untransOriginalIndices = new List<int>();
+
+                var untransSrcTexts = new List<string>();                  //未翻译的句段纯文本列表
+                var untransTmSrcTexts = hasTm ? new List<string>() : null; //未翻译句段关联的翻译记忆原文纯文本列表
+                var untransTmTgtTexts = hasTm ? new List<string>() : null; //未翻译句段关联的翻译记忆译文纯文本列表
+
+                //最终翻译结果列表
+                TranslationResult[] results = new TranslationResult[srcSegms.Length];
+
+                //将句段分成两部分（同时转换成纯文本）：缓存中存在的转换到结果列表，缓存中未存在的转换到未翻译列表
+                DivideCachedAndUncached(srcSegms, tmSrcSegms, tmTgtSegms, untransSrcTexts, untransTmSrcTexts, untransTmTgtTexts, untransOriginalIndices, results);
+
+                //翻译缓存中未存在的
+                if (untransSrcTexts.Count > 0)
+                {
+                    ProcessUncachedTranslations(srcSegms, untransSrcTexts, untransTmSrcTexts, untransTmTgtTexts, untransOriginalIndices, results);
+                }
+
+                return results;
+            }
+            catch (Exception e)
+            {
+                TranslationResult[] translationResult = {new TranslationResult()
+                {
+                    Exception = new MTException(e.Message, e.StackTrace, e.InnerException)
+                }
+                };
+                return translationResult;
+            }
         }
 
         #endregion
@@ -338,6 +363,7 @@ namespace MultiSupplierMTPlugin
             {
                 if (_mtGeneralSettings.NormalizeWhitespaceAroundTags)
                 {
+                    LoggingHelper.LogForсe("NormalizeWhitespaceAroundTags");
                     // TODO: Cannot resolve TagWhitespaceNormalizer in memoq server 9.0.24
                     //segment = TagWhitespaceNormalizer.NormalizeWhitespaceAroundTags(originalSegment, segment, this._srcLangCode, this._trgLangCode);
                 }

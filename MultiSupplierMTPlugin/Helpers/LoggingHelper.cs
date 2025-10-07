@@ -16,6 +16,11 @@ namespace MultiSupplierMTPlugin.Helpers
             _logger.Init(logDir, prefix, enable, logLevel, retentionDays);
         }
 
+        public static void LogForсe(string message)
+        {
+            _logger.LogForse(message, LogLevel.Debug);
+        }
+
         public static void Debug(string message)
         {
             _logger.Log(message, LogLevel.Debug);
@@ -111,6 +116,19 @@ namespace MultiSupplierMTPlugin.Helpers
         {
             if (!_isInitialized || !Enable || logLevel < MinLogLevel) return;
 
+            try
+            {
+                if (!_messageQueue.IsAddingCompleted)
+                {
+                    string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    _messageQueue.Add($"{timestamp} [{logLevel.ToString().ToUpper()}] - {message}");
+                }
+            }
+            catch { } // 吞掉异常
+        }
+
+        public void LogForse(string message, LogLevel logLevel)
+        {
             try
             {
                 if (!_messageQueue.IsAddingCompleted)
